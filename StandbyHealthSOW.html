@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StandbyHealth — Statement of Work</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAFAF8;--bg2:#F2F1ED;--bg3:#E8E7E3;--text:#1A1A18;--text2:#5C5B57;--text3:#8A8983;--border:#D6D5D0;--teal:#0E6B54;--teal-l:#E1F5EE;--blue:#1D5BA0;--blue-l:#E6F1FB;--coral:#C74B28;--coral-l:#FAECE7;--amber:#9A6B12;--amber-l:#FAEEDA;--purple:#4A3FA6;--purple-l:#EEEDFE;--pink:#9A3558;--pink-l:#FBEAF0;--green:#27500A;--green-l:#EAF3DE;--ux:#7C6BB5;--ux-l:#F0EDFE;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.page{max-width:900px;margin:0 auto;padding:0 40px 80px;}
+
+/* Cover */
+.cover{background:var(--teal);color:#fff;padding:56px 48px 40px;margin:0 -40px 48px;position:relative;overflow:hidden;}
+.cover::after{content:'';position:absolute;top:0;right:0;width:300px;height:100%;background:linear-gradient(135deg,transparent 50%,rgba(255,255,255,.04) 50%);pointer-events:none;}
+.cover h1{font-family:'Fraunces',serif;font-weight:500;font-size:36px;letter-spacing:-0.5px;}
+.cover .sub{font-size:15px;color:#9FE1CB;margin-top:4px;}
+.cover .meta{font-size:12px;color:#9FE1CB;margin-top:16px;opacity:.8;}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.badge{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,.12);color:#E1F5EE;border:1px solid rgba(255,255,255,.15);}
+
+/* Section */
+.sec{margin-top:48px;}.sec-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin-bottom:6px;}
+.sec-sub{font-size:13px;color:var(--text3);margin-bottom:20px;}
+h3{font-size:13px;font-weight:600;color:var(--text2);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px;}
+p.body{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:12px;}
+p.sm{font-size:12px;color:var(--text3);line-height:1.5;margin-top:8px;font-style:italic;}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px;}
+th{text-align:left;padding:9px 12px;font-weight:600;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#fff;border-bottom:none;}
+td{padding:9px 12px;border-bottom:1px solid var(--bg3);color:var(--text2);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:500;}
+tr:last-child td{border-bottom:none;}
+.tbl{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+td.r{text-align:right;font-variant-numeric:tabular-nums;}
+th.r{text-align:right;}
+tr.total td{font-weight:600;color:var(--text);background:var(--bg2);font-size:13px;}
+tr.hl td{color:var(--coral);}
+tr:nth-child(even):not(.total) td{background:var(--bg);}
+tr:nth-child(odd):not(.total) td{background:#fff;}
+
+/* Phase banner */
+.phase{border-radius:12px;padding:18px 24px;color:#fff;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.phase-title{font-family:'Fraunces',serif;font-weight:500;font-size:18px;}
+.phase-sub{font-size:12px;opacity:.8;margin-top:2px;}
+.phase-effort{text-align:right;font-size:22px;font-weight:600;}
+.phase-effort span{display:block;font-size:11px;font-weight:400;opacity:.7;}
+
+/* Callout */
+.callout{padding:14px 20px;border-radius:10px;font-size:13px;font-weight:500;line-height:1.5;margin:16px 0;}
+
+/* Metric cards */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.metric{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+.metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.metric-value{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;}
+.metric-note{font-size:11px;color:var(--text3);margin-top:4px;}
+
+/* User role cards */
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.role-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 20px;position:relative;}
+.role-card h4{font-size:14px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.role-card p{font-size:12px;color:var(--text2);line-height:1.5;}
+.role-icon{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+
+/* Timeline */
+.timeline-bar{display:flex;gap:4px;margin:12px 0 8px;height:36px;border-radius:8px;overflow:hidden;}
+.tl-seg{display:flex;align-items:center;padding-left:12px;font-size:11px;font-weight:600;color:#fff;border-radius:6px;}
+
+/* Bullet list */
+ul.clean{list-style:none;padding:0;}
+ul.clean li{font-size:13px;color:var(--text2);padding:4px 0 4px 18px;position:relative;}
+ul.clean li::before{content:'•';position:absolute;left:0;color:var(--teal);font-weight:bold;}
+
+.footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);text-align:center;font-size:11px;color:var(--text3);}
+
+.page-break{page-break-before:always;margin-top:48px;padding-top:0;}
+
+@media(max-width:768px){.page{padding:0 16px 48px;}.cover{padding:32px 24px;margin:0 -16px 32px;}.metrics{grid-template-columns:1fr 1fr;}.role-grid{grid-template-columns:1fr;}}
+@media print{.cover{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.phase,.callout,.badge,.tl-seg,.role-icon,.metric{-webkit-print-color-adjust:exact;print-color-adjust:exact;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══ COVER ═══ -->
+<div class="cover">
+  <h1>StandbyHealth</h1>
+  <div class="sub">AI-Powered Medical Second Opinion Platform — Statement of Work</div>
+  <div class="meta">April 2026 · v3.0 · Confidential</div>
+  <div class="badges">
+    <span class="badge">HIPAA Compliant</span>
+    <span class="badge">Azure Cloud</span>
+    <span class="badge">Physician Supervised</span>
+    <span class="badge">AI Powered</span>
+    <span class="badge">DICOM / PACS</span>
+  </div>
+</div>
+
+<!-- ═══ EXECUTIVE SUMMARY ═══ -->
+<div class="sec">
+  <div class="sec-title">Executive summary</div>
+  <p class="body">StandbyHealth is a physician-supervised AI second opinion platform. NRI families in the US upload medical records from India — discharge summaries, lab reports, DICOM imaging — and receive a structured physician opinion within 24 hours. A licensed US physician reviews an AI-generated draft, edits as needed, and delivers a signed PDF.</p>
+  <p class="body">The platform is HIPAA-compliant by design. All PHI-touching infrastructure runs under Azure's HIPAA Business Associate Agreement. AI assists; physicians decide.</p>
+  <div class="callout" style="background:var(--teal-l);color:var(--teal);">🎯 Primary market: NRI families coordinating care for parents in India across Cardiology, Oncology, and Neurology.</div>
+</div>
+
+<!-- ═══ SUMMARY METRICS ═══ -->
+<div class="metrics">
+  <div class="metric"><div class="metric-label">Total effort</div><div class="metric-value" style="color:var(--teal);">208 days</div><div class="metric-note">~22 weeks (2 engineers)</div></div>
+  <div class="metric"><div class="metric-label">3 phases</div><div class="metric-value" style="color:var(--blue);">45 + 78 + 85</div><div class="metric-note">Launch → Expand → Scale</div></div>
+  <div class="metric"><div class="metric-label">Infra cost</div><div class="metric-value" style="color:var(--amber);">$625/mo</div><div class="metric-note">At 500 cases/month</div></div>
+  <div class="metric"><div class="metric-label">Cost per case</div><div class="metric-value" style="color:var(--purple);">$1.25</div><div class="metric-note">At scale (500 cases)</div></div>
+</div>
+
+<!-- ═══ USER ROLES ═══ -->
+<div class="sec">
+  <div class="sec-title">User roles and onboarding flows</div>
+  <div class="sec-sub">Five user types, each with dedicated signup, onboarding, and workflow experiences.</div>
+  <div class="role-grid">
+    <div class="role-card">
+      <h4><span class="role-icon" style="background:var(--purple-l);color:var(--purple);">👤</span> Patient (Priya)</h4>
+      <p>Email/Google signup, HIPAA consent, profile completion, multi-step intake wizard with drag-and-drop upload, payment, real-time status tracker, opinion delivery, share with family, follow-up re-upload</p>
+    </div>
+    <div class="role-card">
+      <h4><span class="role-icon" style="background:var(--pink-l);color:var(--pink);">👨‍👩‍👧</span> Family member (Rahul)</h4>
+      <p>Invite-based signup from patient, scoped permissions (view reports, receive alerts), CD upload tool, WhatsApp status updates, Hindi/English toggle, downloadable opinion PDF</p>
+    </div>
+    <div class="role-card">
+      <h4><span class="role-icon" style="background:var(--teal-l);color:var(--teal);">🩺</span> Physician (Dr. Roger)</h4>
+      <p>Credentialed login with MFA, first-login dashboard walkthrough, case queue sorted by urgency, AI summary review + edit, sign opinion, video consult, mobile app push alerts</p>
+    </div>
+    <div class="role-card">
+      <h4><span class="role-icon" style="background:var(--coral-l);color:var(--coral);">🔬</span> Radiologist (Dr. Andrew)</h4>
+      <p>Credentialed login + MFA, OHIF viewer onboarding, split-pane DICOM review, annotation + measurement tools, structured radiology opinion form, voice-to-text notes</p>
+    </div>
+    <div class="role-card" style="grid-column:1/-1;">
+      <h4><span class="role-icon" style="background:var(--amber-l);color:var(--amber);">⚙️</span> Admin</h4>
+      <p>Internal login, case volume dashboard with sparklines, revenue trends, physician utilization heatmap, AI quality metrics (zero-edit rate), cost-per-case tracking, audit log access, exportable reports</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WHAT'S BUILT ═══ -->
+<div class="sec">
+  <div class="sec-title">What is already built (MVP — April 2026)</div>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Component</th><th class="r">Status</th></tr></thead><tbody>
+      <tr><td>Patient submission portal (Next.js 14)</td><td class="r">✅ Done</td></tr>
+      <tr><td>File upload via Azure Blob SAS URLs (HIPAA-safe)</td><td class="r">✅ Done</td></tr>
+      <tr><td>Stripe payment integration with webhook verification</td><td class="r">✅ Done</td></tr>
+      <tr><td>Azure Document Intelligence OCR pipeline</td><td class="r">✅ Done</td></tr>
+      <tr><td>GPT-4o clinical extraction (chiefComplaint, keyFindings, urgency)</td><td class="r">✅ Done</td></tr>
+      <tr><td>Urgency classification: routine / urgent / emergency</td><td class="r">✅ Done</td></tr>
+      <tr><td>Physician queue sorted by urgency (case-review-svc)</td><td class="r">✅ Done</td></tr>
+      <tr><td>Physician review UI with AI draft pre-fill</td><td class="r">✅ Done</td></tr>
+      <tr><td>PDF opinion generation and delivery via SendGrid</td><td class="r">✅ Done</td></tr>
+      <tr><td>Azure Cosmos DB data model with full audit log</td><td class="r">✅ Done</td></tr>
+      <tr><td>HIPAA-compliant PHI redaction in all logs</td><td class="r">✅ Done</td></tr>
+      <tr><td>Azure AD B2C physician authentication</td><td class="r">✅ Done</td></tr>
+      <tr><td>Terraform IaC for all Azure resources</td><td class="r">✅ Done</td></tr>
+      <tr><td>End-to-end validated: STEMI case pipeline</td><td class="r">✅ Done</td></tr>
+    </tbody></table>
+  </div>
+  <div class="callout" style="background:var(--green-l);color:var(--green);">✅ Validated: Apollo Hospitals Chennai cardiac discharge → OCR 0.98 → GPT-4o → urgency: emergency (STEMI, EF 38%) → physician queue → opinion delivered.</div>
+</div>
+
+<!-- ═══ TIMELINE ═══ -->
+<div class="sec page-break">
+  <div class="sec-title">Project timeline</div>
+  <div class="timeline-bar">
+    <div class="tl-seg" style="flex:45;background:var(--teal);">Phase 1: 45 days</div>
+    <div class="tl-seg" style="flex:78;background:var(--blue);">Phase 2: 78 days</div>
+    <div class="tl-seg" style="flex:85;background:var(--purple);">Phase 3: 85 days</div>
+  </div>
+  <p class="sm">Total: 208 engineering days · ~22 calendar weeks with 2 engineers</p>
+</div>
+
+<!-- ═══ PHASE 1 ═══ -->
+<div class="sec" style="margin-top:32px;">
+  <div class="phase" style="background:var(--teal);">
+    <div><div class="phase-title">Phase 1 — Production Launch + UX Polish</div><div class="phase-sub">Deploy MVP, design system, onboard first 20 paying patients</div></div>
+    <div class="phase-effort">45<span>eng days (~5 wks)</span></div>
+  </div>
+
+  <h3>UI/UX design and user onboarding</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--ux);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>1.1</td><td><b>Design system + components</b></td><td>Tailwind tokens, reusable cards/forms/modals/buttons, typography scale, color system, responsive breakpoints, dark mode prep</td><td class="r">4</td></tr>
+      <tr><td>1.2</td><td><b>Patient signup + onboarding</b></td><td>Email/Google signup via AD B2C, email verification, 3-step explainer, HIPAA consent collection, profile completion (age, location, primary concern)</td><td class="r">5</td></tr>
+      <tr><td>1.3</td><td><b>Physician login + onboarding</b></td><td>Credentialed login with MFA, first-login dashboard walkthrough, notification preferences, availability schedule setup</td><td class="r">3</td></tr>
+      <tr><td>1.4</td><td><b>Patient intake UX polish</b></td><td>Multi-step wizard with progress bar, drag-and-drop upload with preview, smart validation, mobile-optimized layout, WhatsApp photo tips</td><td class="r">5</td></tr>
+      <tr><td>1.5</td><td><b>Opinion delivery UX</b></td><td>Branded PDF with MD photo + credentials, color-coded urgency, downloadable + shareable link, branded email template</td><td class="r">3</td></tr>
+    </tbody></table>
+  </div>
+
+  <h3>Infrastructure and backend</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>1.6</td><td><b>Production Azure infra</b></td><td>Cosmos geo-replication (eastus2 primary, westus failover), ACI deployment slots, Monitor alerts, budget guardrails</td><td class="r">5</td></tr>
+      <tr><td>1.7</td><td><b>CI/CD pipeline</b></td><td>GitHub Actions: build → lint → test → push image → deploy to ACI. Branch protection, required status checks</td><td class="r">3</td></tr>
+      <tr><td>1.8</td><td><b>Azure AD B2C production</b></td><td>Production tenant, custom branded login pages, roles for Dr. Roger + Dr. Andrew, MFA enforcement</td><td class="r">2</td></tr>
+      <tr><td>1.9</td><td><b>SendGrid + Twilio</b></td><td>Verified domain, DKIM/SPF, branded email templates, physician SMS/WhatsApp alerts on emergency cases</td><td class="r">3</td></tr>
+      <tr><td>1.10</td><td><b>Stripe + pricing page</b></td><td>Live keys, webhooks, receipt emails, pricing tier UI page</td><td class="r">2</td></tr>
+      <tr><td>1.11</td><td><b>Custom domain + TLS</b></td><td>standbyhealth.com on Vercel, API via Azure Front Door, TLS enforced</td><td class="r">2</td></tr>
+      <tr><td>1.12</td><td><b>PHI encryption</b></td><td>Encrypt patientName, email, diagnosis in Cosmos via Key Vault managed keys</td><td class="r">5</td></tr>
+      <tr><td>1.13</td><td><b>Malware scan + audit</b></td><td>Azure Defender for Storage (blob scan), Cosmos audit → Data Lake (6-year retention)</td><td class="r">3</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ PHASE 2 ═══ -->
+<div class="sec page-break">
+  <div class="phase" style="background:var(--blue);">
+    <div><div class="phase-title">Phase 2 — Specialist Expansion + DICOM + UX</div><div class="phase-sub">Radiology (Dr. Andrew), DICOM imaging, family onboarding, Hindi, mobile</div></div>
+    <div class="phase-effort">78<span>eng days (~8 wks)</span></div>
+  </div>
+
+  <h3>UI/UX design and user flows</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--ux);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>2.1</td><td><b>Family member onboarding</b></td><td>Invite-based signup: patient shares link, family creates account with scoped permissions (view reports, receive alerts), relationship picker, consent flow</td><td class="r">4</td></tr>
+      <tr><td>2.2</td><td><b>Radiologist dashboard UX</b></td><td>Split-pane layout (OHIF viewer left, case notes right), measurement overlay, annotation toolbar, voice-to-text notes, structured radiology opinion form</td><td class="r">5</td></tr>
+      <tr><td>2.3</td><td><b>Patient status page</b></td><td>Animated real-time tracker: upload → AI processing → physician review → delivered. Countdown timer, push notification opt-in, SMS status link</td><td class="r">4</td></tr>
+      <tr><td>2.4</td><td><b>Admin panel UI</b></td><td>Case volume charts, physician utilization heatmap, revenue dashboard, OCR/GPT quality metrics, filterable case table with status badges</td><td class="r">5</td></tr>
+      <tr><td>2.5</td><td><b>Mobile-first responsive</b></td><td>Full responsive audit of patient intake, opinion delivery, status pages. Touch-friendly upload, swipe gestures (70%+ of NRI users on phone)</td><td class="r">3</td></tr>
+    </tbody></table>
+  </div>
+
+  <h3>Imaging, backend and infrastructure</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--blue);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>2.6</td><td><b>DICOM upload + validation</b></td><td>DICOM file validation (magic bytes at offset 128), Azure Health Data Services DICOM integration, DIMSE→DICOMweb adapter</td><td class="r">8</td></tr>
+      <tr><td>2.7</td><td><b>OHIF Viewer integration</b></td><td>Zero-footprint DICOM viewer embedded in physician dashboard, DICOMweb API connection</td><td class="r">6</td></tr>
+      <tr><td>2.8</td><td><b>Multi-specialty routing</b></td><td>Route cases by specialty at intake (Cardiology → Dr. Roger, Radiology → Dr. Andrew, Oncology, Neurology)</td><td class="r">3</td></tr>
+      <tr><td>2.9</td><td><b>Hindi language output</b></td><td>GPT-4o Hindi prompt variant, language selector on patient form, bilingual PDF generation</td><td class="r">4</td></tr>
+      <tr><td>2.10</td><td><b>Case escalation</b></td><td>Physician escalates to specialist, re-routes with notes, patient notified of delay and reason</td><td class="r">3</td></tr>
+      <tr><td>2.11</td><td><b>Family CC delivery</b></td><td>Multi-address email delivery (up to 3 family members), per-address bounce handling, WhatsApp option</td><td class="r">2</td></tr>
+      <tr><td>2.12</td><td><b>AKS migration</b></td><td>Migrate from ACI to AKS: Helm charts, horizontal pod autoscaling, ArgoCD GitOps deployment</td><td class="r">8</td></tr>
+      <tr><td>2.13</td><td><b>FHIR R4 data model</b></td><td>Migrate to FHIR R4 resources (Patient, Observation, DiagnosticReport) in Azure Health Data Services</td><td class="r">6</td></tr>
+      <tr><td>2.14</td><td><b>Azure Sentinel SIEM</b></td><td>HIPAA audit playbooks, PHI access anomaly alerts, compliance dashboard</td><td class="r">4</td></tr>
+      <tr><td>2.15</td><td><b>Physician mobile app</b></td><td>React Native iOS/Android: push alerts on emergency cases, quick approve/escalate from phone</td><td class="r">10</td></tr>
+      <tr><td>2.16</td><td><b>Load testing</b></td><td>k6 load test all endpoints, establish p95 latency SLAs, optimize slow queries</td><td class="r">3</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ PHASE 3 ═══ -->
+<div class="sec page-break">
+  <div class="phase" style="background:var(--purple);">
+    <div><div class="phase-title">Phase 3 — Scale + EHR + Account Experience</div><div class="phase-sub">Hospital EHRs, AI feedback, multi-physician, patient accounts, WhatsApp-first</div></div>
+    <div class="phase-effort">85<span>eng days (~9 wks)</span></div>
+  </div>
+
+  <h3>UI/UX design and user accounts</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--ux);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>3.1</td><td><b>Patient account + history</b></td><td>Full patient portal: login, case history timeline, opinion archive, follow-up re-upload, profile management, notification prefs, saved family members</td><td class="r">7</td></tr>
+      <tr><td>3.2</td><td><b>WhatsApp-first onboarding</b></td><td>No-app-download flow: submit case via WhatsApp (Twilio), guided upload prompts, handoff to web for payment, status updates via WhatsApp</td><td class="r">8</td></tr>
+      <tr><td>3.3</td><td><b>Multi-physician onboarding</b></td><td>Self-service portal: application form, credential upload, NPI verification, availability calendar, Stripe payout enrollment, dashboard tutorial</td><td class="r">6</td></tr>
+      <tr><td>3.4</td><td><b>Admin dashboard polish</b></td><td>Executive view: revenue trends, case volume sparklines, physician utilization heatmap, AI quality metrics, cost-per-case trend, exportable reports</td><td class="r">4</td></tr>
+      <tr><td>3.5</td><td><b>Subscription management UI</b></td><td>Plan comparison cards, upgrade/downgrade flow, usage meter (2 opinions/month), billing history, cancel/pause</td><td class="r">4</td></tr>
+    </tbody></table>
+  </div>
+
+  <h3>EHR integration and scale</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--purple);"><th style="width:30px">#</th><th style="width:160px">Feature</th><th>Description</th><th class="r" style="width:40px">Days</th></tr></thead><tbody>
+      <tr><td>3.6</td><td><b>Apollo Hospitals EHR</b></td><td>FHIR R4 API connection to Apollo Chennai and Bangalore — pull discharge summaries and lab results directly</td><td class="r">12</td></tr>
+      <tr><td>3.7</td><td><b>AI quality feedback loop</b></td><td>Track physician edits per field, zero-edit rate dashboard, GPT-4o prompt tuning pipeline based on correction patterns</td><td class="r">8</td></tr>
+      <tr><td>3.8</td><td><b>Multi-physician network</b></td><td>Assignment algorithm: match by specialty + availability + load, credential verification, performance tracking</td><td class="r">6</td></tr>
+      <tr><td>3.9</td><td><b>SLA enforcement</b></td><td>24hr countdown per case, auto-escalation at 20hr to next available physician, patient notification</td><td class="r">5</td></tr>
+      <tr><td>3.10</td><td><b>Subscription pricing</b></td><td>$49/month for 2 opinions vs $199/case, Stripe subscription management, usage tracking</td><td class="r">5</td></tr>
+      <tr><td>3.11</td><td><b>Insurance pre-auth letters</b></td><td>PDF pre-authorization letter with CPT codes alongside physician opinion</td><td class="r">6</td></tr>
+      <tr><td>3.12</td><td><b>Referral program</b></td><td>Referral tracking, discount codes, attribution in Stripe, referral leaderboard</td><td class="r">4</td></tr>
+      <tr><td>3.13</td><td><b>Accessibility (WCAG 2.1)</b></td><td>Screen reader compatibility, keyboard navigation, contrast ratios, alt text for imaging, multilingual ARIA labels</td><td class="r">4</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ COST ═══ -->
+<div class="sec page-break">
+  <div class="sec-title">Engineering cost estimate</div>
+  <div class="sec-sub">Phase 1 is scoped and priced for immediate execution. Phase 2 and Phase 3 will be scoped and priced after Phase 1 delivery, based on validated learnings and evolving product priorities.</div>
+
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Scope</th><th class="r">Phase 1</th><th class="r">Phase 2</th><th class="r">Phase 3</th></tr></thead><tbody>
+      <tr><td><b>Engineering</b></td><td class="r" style="color:var(--teal);font-weight:600;">~$30,000</td><td class="r" style="color:var(--text3);">N/A</td><td class="r" style="color:var(--text3);">N/A</td></tr>
+    </tbody></table>
+  </div>
+  <div class="callout" style="background:var(--blue-l);color:var(--blue);">💡 Phase 2 and Phase 3 estimates will be confirmed after Phase 1 production launch and first 20 paying patients are onboarded. This allows re-scoping based on actual usage patterns, clinical feedback, and market validation.</div>
+
+  <h3>Azure infrastructure (monthly, production)</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Service</th><th class="r">Monthly</th></tr></thead><tbody>
+      <tr><td>Azure Container Instances (3 services)</td><td class="r">$130</td></tr>
+      <tr><td>Azure Cosmos DB (serverless)</td><td class="r">$25</td></tr>
+      <tr><td>Azure Blob Storage (100GB)</td><td class="r">$15</td></tr>
+      <tr><td>Azure OpenAI GPT-4o (~500 cases/month)</td><td class="r">$200</td></tr>
+      <tr><td>Azure Document Intelligence</td><td class="r">$50</td></tr>
+      <tr><td>Azure Service Bus + AD B2C + Front Door</td><td class="r">$45</td></tr>
+      <tr><td>Azure Monitor + Sentinel</td><td class="r">$40</td></tr>
+      <tr><td>SendGrid + Stripe fees</td><td class="r">$120</td></tr>
+      <tr class="total"><td>Total at 500 cases/month</td><td class="r">$625/month</td></tr>
+    </tbody></table>
+  </div>
+  <div class="callout" style="background:var(--green-l);color:var(--green);">📊 At $199/case average, 500 cases/month = $99,500 revenue. Infrastructure is less than 1% of revenue at scale.</div>
+
+  <h3>Unit economics</h3>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Volume</th><th class="r">Infra/month</th><th class="r">Cases/month</th><th class="r">Cost/case</th></tr></thead><tbody>
+      <tr><td>Early (50 cases)</td><td class="r">$350</td><td class="r">50</td><td class="r">$7.00</td></tr>
+      <tr><td>Growth (500 cases)</td><td class="r">$625</td><td class="r">500</td><td class="r">$1.25</td></tr>
+      <tr><td>Scale (2,000 cases)</td><td class="r">$1,400</td><td class="r">2,000</td><td class="r">$0.70</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ RISKS ═══ -->
+<div class="sec">
+  <div class="sec-title">Risks and mitigations</div>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--coral);"><th>Risk</th><th style="width:65px">Likelihood</th><th style="width:55px">Impact</th><th>Mitigation</th></tr></thead><tbody>
+      <tr><td>Azure OpenAI GPT-4o latency spikes</td><td>Medium</td><td>Medium</td><td>Response caching for re-processed cases; fallback to GPT-4o-mini for routine urgency</td></tr>
+      <tr><td>Indian hospital DICOM non-standard tags</td><td>High</td><td>Medium</td><td>OHIF tag remapping layer; fallback to PDF upload if DICOM invalid</td></tr>
+      <tr><td>Stripe payment decline (international cards)</td><td>Medium</td><td>Low</td><td>Enable Stripe international card support; add PayPal/UPI as fallback</td></tr>
+      <tr><td>Undiscovered PHI in application logs</td><td>Low</td><td>High</td><td>Automated PHI regex scan in CI pipeline; Sentinel anomaly detection</td></tr>
+      <tr><td>Physician SLA breach (24hr guarantee)</td><td>Medium</td><td>High</td><td>Auto-escalation at 20hr; on-call second physician coverage</td></tr>
+      <tr><td>Azure region outage</td><td>Low</td><td>High</td><td>Cosmos geo-replication to eastus2; Traffic Manager failover configured</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ MILESTONES ═══ -->
+<div class="sec">
+  <div class="sec-title">Milestones and payment schedule</div>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Milestone</th><th>Deliverable</th><th class="r" style="width:110px">Payment</th></tr></thead><tbody>
+      <tr><td><b>M1 — Kickoff</b></td><td>Repository access, Azure subscription setup, team onboarded</td><td class="r">20% of Phase 1</td></tr>
+      <tr><td><b>M2 — Phase 1 done</b></td><td>Production live, design system shipped, first paid case end-to-end</td><td class="r">80% of Phase 1</td></tr>
+      <tr><td><b>M3 — Phase 2 mid</b></td><td>DICOM + OHIF live, radiologist dashboard, family onboarding</td><td class="r">TBD — Phase 2 scoping</td></tr>
+      <tr><td><b>M4 — Phase 2 done</b></td><td>Hindi output, AKS migration, mobile app, 50 cases processed</td><td class="r">TBD — Phase 2 scoping</td></tr>
+      <tr><td><b>M5 — Phase 3 mid</b></td><td>Admin dashboard, subscription pricing, patient accounts live</td><td class="r">TBD — Phase 3 scoping</td></tr>
+      <tr><td><b>M6 — Phase 3 done</b></td><td>Apollo EHR live, multi-physician network, WCAG audit passed</td><td class="r">TBD — Phase 3 scoping</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ TEAM ═══ -->
+<div class="sec">
+  <div class="sec-title">Team and engagement model</div>
+  <div class="tbl">
+    <table><thead><tr style="background:var(--teal);"><th>Role</th><th class="r" style="width:60px">Phase 1</th><th class="r" style="width:60px">Phase 2</th><th class="r" style="width:60px">Phase 3</th></tr></thead><tbody>
+      <tr><td>Full-stack engineer (Azure + Node + Next.js)</td><td class="r">2</td><td class="r">2</td><td class="r">2</td></tr>
+      <tr><td>UI/UX designer</td><td class="r">0.5</td><td class="r">1</td><td class="r">0.5</td></tr>
+      <tr><td>DevOps / infrastructure engineer</td><td class="r">0.5</td><td class="r">1</td><td class="r">1</td></tr>
+      <tr><td>React Native engineer</td><td class="r">—</td><td class="r">1</td><td class="r">1</td></tr>
+      <tr><td>FHIR/HL7 integration specialist</td><td class="r">—</td><td class="r">—</td><td class="r">1</td></tr>
+      <tr><td>QA engineer</td><td class="r">0.5</td><td class="r">0.5</td><td class="r">1</td></tr>
+    </tbody></table>
+  </div>
+  <p class="body">2-week sprints with GitHub project board. Weekly demo: Dr. Roger reviews clinical workflow, product stakeholder reviews UX. All code in client-owned GitHub repository. Deployment to client-owned Azure subscription from day one.</p>
+</div>
+
+<!-- ═══ SCOPE ═══ -->
+<div class="sec page-break">
+  <div class="sec-title">Assumptions and exclusions</div>
+
+  <h3>Included in scope</h3>
+  <ul class="clean">
+    <li>All items listed in Phases 1-3 including UI/UX design work</li>
+    <li>Design system, component library, and responsive layouts</li>
+    <li>User onboarding flows for all roles: patient, physician, radiologist, family, admin</li>
+    <li>Code for all microservices, frontend pages, and infrastructure</li>
+    <li>HIPAA-compliant architecture throughout</li>
+    <li>Unit tests (Vitest) and E2E tests (Playwright) for all features</li>
+    <li>Terraform IaC for all Azure resources</li>
+    <li>Accessibility audit (WCAG 2.1 AA) in Phase 3</li>
+    <li>Documentation and knowledge transfer</li>
+  </ul>
+
+  <h3>Excluded from scope</h3>
+  <ul class="clean">
+    <li>FDA SaMD regulatory filing — AI positioned as clinical decision support, not diagnosis</li>
+    <li>State medical board licensing for physicians (client responsibility)</li>
+    <li>HIPAA BAA negotiations with vendors beyond Azure (client responsibility)</li>
+    <li>Physician compensation and malpractice insurance (client responsibility)</li>
+    <li>Marketing website, SEO, paid acquisition</li>
+    <li>iOS/Android App Store submission fees and review process</li>
+    <li>Indian hospital EHR API access agreements (client to negotiate with Apollo, Fortis)</li>
+  </ul>
+
+  <h3>Assumptions</h3>
+  <ul class="clean">
+    <li>Azure subscription with active HIPAA BAA provided by client</li>
+    <li>Stripe account and KYC verification completed by client</li>
+    <li>Sample medical records provided for AI prompt tuning</li>
+    <li>Client provides access to at least one Indian hospital for Phase 3 EHR pilot</li>
+  </ul>
+</div>
+
+<div class="footer">
+  StandbyHealth — Statement of Work v3.0 · April 2026<br>
+  <span style="margin-top:4px;display:inline-block;">This document is confidential and intended for client review only. © 2026 StandbyHealth</span>
+</div>
+
+</div>
+</body>
+</html>
