@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cadet Drill — App Preview</title>
+<style>
+  :root {
+    --primary:       #4a5d23;
+    --primary-dark:  #2f3d15;
+    --bg:            #faf7f0;
+    --surface:       #f5f1e8;
+    --gold:          #c9a961;
+    --text:          #1c1c1a;
+    --text-soft:     #4a4a46;
+    --border:        #e2ddd4;
+    --green-light:   #e8eed8;
+    --red:           #c0392b;
+    --white:         #ffffff;
+    --radius:        10px;
+    --shadow:        0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: #d4cfc6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 24px 0 40px;
+  }
+
+  .device {
+    width: 375px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 36px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 8px #1a1a1a, 0 0 0 10px #333;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .status-bar {
+    background: var(--primary-dark);
+    color: white;
+    padding: 12px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .screen.active { display: flex; }
+
+  .scroll-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-body::-webkit-scrollbar { display: none; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: white;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-shrink: 0;
+    padding: 8px 0 12px;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 0;
+    font-size: 10px;
+    color: var(--text-soft);
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-item.active { color: var(--primary); }
+  .nav-icon { font-size: 20px; line-height: 1; }
+
+  /* Topbar */
+  .topbar {
+    background: var(--primary-dark);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topbar h1 { font-size: 17px; font-weight: 600; }
+  .topbar-back {
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+  }
+
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    margin: 0 16px 12px;
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  .btn:active { opacity: 0.8; }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+  .btn-gold { background: var(--gold); color: white; }
+  .btn-full { width: 100%; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+
+  /* Progress bar */
+  .progress-track {
+    background: var(--surface);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--primary);
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s;
+  }
+
+  /* ── HOME SCREEN ─────────────────────────────────────────────────────────── */
+  .home-header {
+    background: var(--primary-dark);
+    padding: 16px 16px 20px;
+    flex-shrink: 0;
+  }
+  .home-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .user-info { display: flex; flex-direction: column; }
+  .greeting { color: rgba(255,255,255,0.7); font-size: 13px; }
+  .user-name { color: white; font-size: 18px; font-weight: 700; }
+  .stats-pills { display: flex; gap: 8px; }
+  .pill {
+    background: rgba(255,255,255,0.15);
+    border-radius: 99px;
+    padding: 5px 10px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .countdown-strip {
+    background: rgba(201,169,97,0.25);
+    border: 1px solid rgba(201,169,97,0.4);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .countdown-label { color: rgba(255,255,255,0.75); font-size: 12px; }
+  .countdown-days { color: var(--gold); font-size: 22px; font-weight: 800; }
+  .countdown-sub { color: rgba(255,255,255,0.6); font-size: 11px; }
+
+  .continue-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: -10px 16px 0;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .continue-icon {
+    width: 42px; height: 42px;
+    background: var(--green-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .continue-info { flex: 1; }
+  .continue-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .continue-sub { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+  .continue-arrow { color: var(--text-soft); font-size: 18px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 16px 8px;
+  }
+
+  .quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px 4px;
+  }
+  .quick-tile {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px 14px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .quick-tile:active { transform: scale(0.97); }
+  .quick-tile-icon { font-size: 26px; margin-bottom: 8px; }
+  .quick-tile-label { font-size: 14px; font-weight: 700; color: var(--text); }
+  .quick-tile-sub { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+
+  .goal-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 12px;
+    box-shadow: var(--shadow);
+  }
+  .goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .goal-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .goal-count { font-size: 13px; font-weight: 700; color: var(--primary); }
+
+  /* ── MOCK TEST ───────────────────────────────────────────────────────────── */
+  .mock-timer-bar {
+    background: var(--primary-dark);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .timer-pill {
+    background: rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    border-radius: 99px;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .timer-pill.warning { background: rgba(192,57,43,0.6); }
+  .q-counter { color: rgba(255,255,255,0.8); font-size: 13px; }
+
+  .q-progress {
+    display: flex;
+    gap: 3px;
+    padding: 10px 16px;
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+  .q-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .q-dot.answered { background: var(--primary); }
+  .q-dot.current { background: var(--gold); }
+  .q-dot.wrong { background: var(--red); }
+
+  .question-body { padding: 16px 16px 8px; }
+  .q-label { font-size: 11px; font-weight: 600; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .q-stem { font-size: 15px; font-weight: 500; color: var(--text); line-height: 1.5; }
+
+  .options-list { padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:active { background: var(--surface); }
+  .option.selected { border-color: var(--primary); background: var(--green-light); }
+  .option.correct { border-color: #27ae60; background: #eafaf1; }
+  .option.wrong { border-color: var(--red); background: #fdf2f2; }
+  .option-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-soft);
+    flex-shrink: 0;
+  }
+  .option.selected .option-letter { background: var(--primary); color: white; }
+  .option.correct .option-letter { background: #27ae60; color: white; }
+  .option.wrong .option-letter { background: var(--red); color: white; }
+  .option-text { font-size: 14px; color: var(--text); line-height: 1.4; flex: 1; }
+
+  .explanation-box {
+    margin: 0 16px 12px;
+    background: #f0f7ff;
+    border: 1px solid #b3d4f5;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .explanation-box .ex-label { font-size: 11px; font-weight: 700; color: #1a6ea8; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+  .explanation-box p { font-size: 13px; color: #2c5282; line-height: 1.5; }
+
+  .mock-footer {
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .bookmark-btn {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .bookmark-btn.active { border-color: var(--gold); background: #fdf8ec; }
+
+  /* ── MOCK RESULTS ────────────────────────────────────────────────────────── */
+  .results-header {
+    background: var(--primary-dark);
+    padding: 24px 16px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .results-title { color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 4px; }
+  .results-score { color: white; font-size: 52px; font-weight: 800; line-height: 1; }
+  .results-max { color: rgba(255,255,255,0.5); font-size: 16px; }
+  .results-badges { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+  .result-badge {
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+  .result-badge-val { color: white; font-size: 18px; font-weight: 700; }
+  .result-badge-label { color: rgba(255,255,255,0.6); font-size: 10px; margin-top: 2px; }
+
+  .subject-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .subject-row:last-child { border-bottom: none; }
+  .subject-name { flex: 1; font-size: 14px; color: var(--text); font-weight: 500; }
+  .subject-score { font-size: 13px; font-weight: 700; color: var(--primary); width: 36px; text-align: right; }
+  .weak-tag {
+    background: #fdf2f2;
+    color: var(--red);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 99px;
+    border: 1px solid #f5c6c6;
+  }
+
+  /* ── LEARN ───────────────────────────────────────────────────────────────── */
+  .subject-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .subject-card:active { opacity: 0.85; }
+  .subject-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .subject-info { flex: 1; }
+  .subject-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .subject-meta { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+  .subject-progress { margin-top: 6px; }
+
+  /* ── LESSON DETAIL ───────────────────────────────────────────────────────── */
+  .lesson-content { padding: 16px; line-height: 1.7; font-size: 15px; color: var(--text); }
+  .lesson-content h2 { font-size: 18px; font-weight: 700; margin: 20px 0 8px; color: var(--primary-dark); }
+  .lesson-content h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
+  .lesson-content p { margin-bottom: 12px; }
+  .lesson-content ul { padding-left: 18px; margin-bottom: 12px; }
+  .lesson-content li { margin-bottom: 6px; }
+  .lesson-content .highlight {
+    background: var(--green-light);
+    border-left: 3px solid var(--primary);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+
+  /* ── PROFILE ─────────────────────────────────────────────────────────────── */
+  .profile-header {
+    background: var(--primary-dark);
+    padding: 24px 16px 28px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .rank-badge {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 10px;
+    border: 3px solid rgba(255,255,255,0.3);
+  }
+  .profile-name { color: white; font-size: 20px; font-weight: 700; }
+  .profile-rank { color: var(--gold); font-size: 14px; font-weight: 600; margin-top: 2px; }
+  .profile-unit { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 0 16px 12px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .stat-cell {
+    background: white;
+    padding: 14px 8px;
+    text-align: center;
+  }
+  .stat-val { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .stat-label { font-size: 10px; color: var(--text-soft); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  .pro-card {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pro-info { flex: 1; }
+  .pro-title { color: white; font-size: 15px; font-weight: 700; }
+  .pro-sub { color: rgba(255,255,255,0.7); font-size: 12px; margin-top: 2px; }
+
+  .menu-row {
+    background: white;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .menu-row .menu-icon { font-size: 20px; width: 28px; text-align: center; }
+  .menu-row .menu-arrow { margin-left: auto; color: var(--text-soft); }
+
+  /* ── PAYWALL ─────────────────────────────────────────────────────────────── */
+  .paywall-header {
+    background: var(--primary-dark);
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .paywall-title { color: white; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+  .paywall-sub { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.5; }
+
+  .plan-card {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 0 16px 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    position: relative;
+  }
+  .plan-card.selected { border-color: var(--primary); background: var(--green-light); }
+  .plan-card.featured::before {
+    content: 'BEST VALUE';
+    position: absolute;
+    top: -10px; left: 50%; transform: translateX(-50%);
+    background: var(--gold);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    letter-spacing: 0.5px;
+  }
+  .plan-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .plan-name { font-size: 16px; font-weight: 700; color: var(--text); }
+  .plan-price { text-align: right; }
+  .plan-amount { font-size: 22px; font-weight: 800; color: var(--primary); }
+  .plan-period { font-size: 11px; color: var(--text-soft); }
+  .plan-features { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+  .plan-feature { font-size: 13px; color: var(--text-soft); display: flex; align-items: center; gap: 6px; }
+  .plan-feature::before { content: '✓'; color: var(--primary); font-weight: 700; }
+
+  /* ── ONBOARDING ──────────────────────────────────────────────────────────── */
+  .onboard-screen {
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+    flex: 1;
+  }
+  .onboard-logo { font-size: 48px; margin-bottom: 12px; }
+  .onboard-title { font-size: 24px; font-weight: 800; color: var(--primary-dark); text-align: center; margin-bottom: 6px; }
+  .onboard-sub { font-size: 14px; color: var(--text-soft); text-align: center; margin-bottom: 32px; line-height: 1.5; }
+
+  .option-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 24px; }
+  .select-option {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .select-option.selected { border-color: var(--primary); background: var(--green-light); }
+  .select-option .opt-icon { font-size: 22px; }
+
+  .otp-input-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 24px 0;
+  }
+  .otp-box {
+    width: 48px; height: 56px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    background: white;
+    color: var(--text);
+  }
+  .otp-box:first-child, .otp-box:nth-child(2), .otp-box:nth-child(3) {
+    border-color: var(--primary);
+    background: var(--green-light);
+  }
+
+  .phone-input {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    background: white;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .phone-input:focus { border-color: var(--primary); }
+
+  /* ── DRILL ───────────────────────────────────────────────────────────────── */
+  .drill-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .drill-thumb {
+    width: 60px; height: 44px;
+    background: var(--primary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .drill-info { flex: 1; }
+  .drill-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .drill-meta { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+  .drill-badge {
+    background: var(--green-light);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 99px;
+    border: 1px solid #c5d99a;
+  }
+  .drill-lock {
+    background: var(--surface);
+    color: var(--text-soft);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── PRACTICE FILTER ─────────────────────────────────────────────────────── */
+  .filter-bar {
+    padding: 10px 16px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    background: white;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-soft);
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .filter-chip.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+  /* XP toast */
+  .xp-toast {
+    position: absolute;
+    top: 80px; right: 16px;
+    background: var(--gold);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .xp-toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Nav label below device */
+  .screen-label {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    max-width: 375px;
+  }
+  .screen-btn {
+    background: white;
+    border: none;
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-soft);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    transition: all 0.15s;
+  }
+  .screen-btn:hover { background: var(--primary); color: white; }
+  .screen-btn.current { background: var(--primary); color: white; }
+</style>
+</head>
+<body>
+
+<div class="device">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>🔋 Cadet Drill</span>
+    <span>📶 4G</span>
+  </div>
+
+  <div id="xp-toast" class="xp-toast">+10 XP</div>
+
+  <!-- ══════════════════════════════════════════════════════════ ONBOARDING 1 -->
+  <div class="screen active" id="screen-onboard-welcome" style="background:var(--bg)">
+    <div class="onboard-screen">
+      <div class="onboard-logo">🎖️</div>
+      <div class="onboard-title">Cadet Drill</div>
+      <div class="onboard-sub">India's exam prep platform for NCC A, B & C certificate cadets</div>
+      <div style="width:100%">
+        <div style="font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Choose language</div>
+        <div class="option-grid">
+          <div class="select-option selected" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+            <span class="opt-icon">🇬🇧</span> English
+          </div>
+          <div class="select-option" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+            <span class="opt-icon">🇮🇳</span> हिन्दी
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="showScreen('onboard-phone')">Continue →</button>
+      <div style="margin-top:14px;font-size:13px;color:var(--text-soft);text-align:center">
+        Browse as guest — <span style="color:var(--primary);font-weight:600;cursor:pointer" onclick="showScreen('home')">Preview app</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ ONBOARDING 2 -->
+  <div class="screen" id="screen-onboard-phone">
+    <div class="topbar">
+      <div class="topbar-back" onclick="showScreen('onboard-welcome')">‹</div>
+      <h1>Phone Verification</h1>
+      <div style="width:32px"></div>
+    </div>
+    <div class="onboard-screen" style="padding-top:24px">
+      <div style="width:100%">
+        <div style="font-size:14px;color:var(--text-soft);margin-bottom:16px;line-height:1.5">Enter your mobile number to receive a one-time password</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <div style="background:white;border:2px solid var(--border);border-radius:var(--radius);padding:14px 12px;font-size:15px;font-weight:600;color:var(--text);width:70px;text-align:center">+91</div>
+          <input class="phone-input" style="flex:1;margin:0" type="tel" placeholder="98765 43210" value="98765 43210"/>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="showScreen('onboard-otp')" style="margin-top:8px">Send OTP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ ONBOARDING 3 -->
+  <div class="screen" id="screen-onboard-otp">
+    <div class="topbar">
+      <div class="topbar-back" onclick="showScreen('onboard-phone')">‹</div>
+      <h1>Enter OTP</h1>
+      <div style="width:32px"></div>
+    </div>
+    <div class="onboard-screen" style="padding-top:24px">
+      <div style="width:100%;text-align:center">
+        <div style="font-size:14px;color:var(--text-soft);margin-bottom:4px">OTP sent to +91 98765 43210</div>
+        <div class="otp-input-row">
+          <input class="otp-box" maxlength="1" value="4"/>
+          <input class="otp-box" maxlength="1" value="2"/>
+          <input class="otp-box" maxlength="1" value="7"/>
+          <input class="otp-box" maxlength="1" placeholder="·"/>
+          <input class="otp-box" maxlength="1" placeholder="·"/>
+          <input class="otp-box" maxlength="1" placeholder="·"/>
+        </div>
+        <div style="font-size:13px;color:var(--text-soft);margin-bottom:24px">Resend OTP in <strong style="color:var(--primary)">25s</strong></div>
+        <button class="btn btn-primary btn-full" onclick="showScreen('onboard-wing')">Verify →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ ONBOARDING 4 -->
+  <div class="screen" id="screen-onboard-wing">
+    <div class="topbar">
+      <div class="topbar-back" onclick="showScreen('onboard-otp')">‹</div>
+      <h1>Your Wing</h1>
+      <div style="width:32px"></div>
+    </div>
+    <div class="onboard-screen" style="padding-top:24px">
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:20px">Which NCC wing are you in?</div>
+      <div class="option-grid" style="margin-bottom:24px">
+        <div class="select-option selected" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">🪖</span> Army Wing
+        </div>
+        <div class="select-option" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">⚓</span> Naval Wing
+        </div>
+        <div class="select-option" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">✈️</span> Air Wing
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="showScreen('onboard-cert')">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ ONBOARDING 5 -->
+  <div class="screen" id="screen-onboard-cert">
+    <div class="topbar">
+      <div class="topbar-back" onclick="showScreen('onboard-wing')">‹</div>
+      <h1>Target Exam</h1>
+      <div style="width:32px"></div>
+    </div>
+    <div class="onboard-screen" style="padding-top:24px">
+      <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:20px">Which certificate are you preparing for?</div>
+      <div class="option-grid" style="margin-bottom:16px">
+        <div class="select-option" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">🅐</span> A Certificate (Junior Division)
+        </div>
+        <div class="select-option selected" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">🅑</span> B Certificate (Senior Division)
+        </div>
+        <div class="select-option" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">
+          <span class="opt-icon">🅒</span> C Certificate (Senior Division)
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="showScreen('home')">Start Preparing 🎯</button>
+      <div style="margin-top:10px;font-size:12px;color:var(--text-soft);text-align:center;cursor:pointer" onclick="showScreen('home')">Skip — set exam date later</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ HOME -->
+  <div class="screen" id="screen-home">
+    <div class="home-header">
+      <div class="home-header-top">
+        <div class="user-info">
+          <span class="greeting">Good morning,</span>
+          <span class="user-name">Cadet Sharma 🪖</span>
+        </div>
+        <div class="stats-pills">
+          <div class="pill">🔥 12</div>
+          <div class="pill">⚡ 1,240</div>
+        </div>
+      </div>
+      <div class="countdown-strip">
+        <div>
+          <div class="countdown-label">B Certificate Exam</div>
+          <div class="countdown-days">45 <span style="font-size:14px;font-weight:500">days left</span></div>
+        </div>
+        <div style="text-align:right">
+          <div class="countdown-sub">4 Mar 2027</div>
+          <div style="color:var(--gold);font-size:11px;font-weight:600;margin-top:2px">Drill mode</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-body" style="padding-top:16px">
+      <div class="continue-card" onclick="showScreen('lesson')">
+        <div class="continue-icon">📖</div>
+        <div class="continue-info">
+          <div class="continue-title">Continue: Map Reading</div>
+          <div class="continue-sub">Chapter 3 · 8 min left</div>
+          <div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:65%"></div></div>
+        </div>
+        <div class="continue-arrow">›</div>
+      </div>
+
+      <div class="section-title">Today's Goal</div>
+      <div class="goal-card">
+        <div class="goal-header">
+          <span class="goal-title">Practice 20 MCQs</span>
+          <span class="goal-count">14 / 20</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:70%"></div></div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text-soft)">6 more to complete today's goal</div>
+      </div>
+
+      <div class="section-title">Quick Actions</div>
+      <div class="quick-grid">
+        <div class="quick-tile" onclick="showScreen('learn')">
+          <div class="quick-tile-icon">📚</div>
+          <div class="quick-tile-label">Learn</div>
+          <div class="quick-tile-sub">12 lessons left</div>
+        </div>
+        <div class="quick-tile" onclick="showScreen('practice')">
+          <div class="quick-tile-icon">✏️</div>
+          <div class="quick-tile-label">Practice</div>
+          <div class="quick-tile-sub">340 / 500 used</div>
+        </div>
+        <div class="quick-tile" onclick="showScreen('mock')">
+          <div class="quick-tile-icon">⏱️</div>
+          <div class="quick-tile-label">Mock Test</div>
+          <div class="quick-tile-sub">60 min · 50 Qs</div>
+        </div>
+        <div class="quick-tile" onclick="showScreen('drill')">
+          <div class="quick-tile-icon">🎯</div>
+          <div class="quick-tile-label">Drill</div>
+          <div class="quick-tile-sub">18 movements</div>
+        </div>
+      </div>
+
+      <div class="section-title">Weak Topics</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:14px;color:var(--text)">Weapon Training</span>
+            <span style="font-size:13px;font-weight:700;color:var(--red)">38% accuracy</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:38%;background:var(--red)"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+            <span style="font-size:14px;color:var(--text)">Map Reading</span>
+            <span style="font-size:13px;font-weight:700;color:#e67e22">52% accuracy</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:52%;background:#e67e22"></div></div>
+        </div>
+        <button class="btn btn-outline btn-full btn-sm" style="margin-top:12px" onclick="showScreen('practice')">Practice these topics</button>
+      </div>
+
+      <div style="height:16px"></div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="showScreen('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="showScreen('learn')"><div class="nav-icon">📚</div>Learn</div>
+      <div class="nav-item" onclick="showScreen('practice')"><div class="nav-icon">✏️</div>Practice</div>
+      <div class="nav-item" onclick="showScreen('mock-list')"><div class="nav-icon">⏱️</div>Mock</div>
+      <div class="nav-item" onclick="showScreen('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ LEARN -->
+  <div class="screen" id="screen-learn">
+    <div class="topbar"><div class="topbar-back" onclick="showScreen('home')">‹</div><h1>Learn</h1><div style="width:32px"></div></div>
+    <div class="filter-bar">
+      <div class="filter-chip active">All</div>
+      <div class="filter-chip">Army</div>
+      <div class="filter-chip">B Certificate</div>
+    </div>
+    <div class="scroll-body" style="padding-top:12px">
+      <div class="subject-card" onclick="showScreen('lesson')">
+        <div class="subject-icon" style="background:#e8f5e9">🗺️</div>
+        <div class="subject-info">
+          <div class="subject-title">Map Reading</div>
+          <div class="subject-meta">8 chapters · 24 lessons</div>
+          <div class="subject-progress"><div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:40%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);font-weight:600">40%</div>
+      </div>
+      <div class="subject-card" onclick="showScreen('lesson')">
+        <div class="subject-icon" style="background:#fff3e0">🔫</div>
+        <div class="subject-info">
+          <div class="subject-title">Weapon Training</div>
+          <div class="subject-meta">6 chapters · 18 lessons</div>
+          <div class="subject-progress"><div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:25%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);font-weight:600">25%</div>
+      </div>
+      <div class="subject-card">
+        <div class="subject-icon" style="background:#e8eaf6">⚕️</div>
+        <div class="subject-info">
+          <div class="subject-title">First Aid</div>
+          <div class="subject-meta">4 chapters · 12 lessons</div>
+          <div class="subject-progress"><div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:75%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--primary);font-weight:700">75%</div>
+      </div>
+      <div class="subject-card">
+        <div class="subject-icon" style="background:#fce4ec">🏃</div>
+        <div class="subject-info">
+          <div class="subject-title">Field Craft & Battle Craft</div>
+          <div class="subject-meta">5 chapters · 15 lessons</div>
+          <div class="subject-progress"><div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:10%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);font-weight:600">10%</div>
+      </div>
+      <div class="subject-card">
+        <div class="subject-icon" style="background:#e0f7fa">📡</div>
+        <div class="subject-info">
+          <div class="subject-title">Communication</div>
+          <div class="subject-meta">3 chapters · 9 lessons</div>
+          <div class="subject-progress"><div class="progress-track" style="margin-top:6px"><div class="progress-fill" style="width:0%"></div></div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-soft);font-weight:600">0%</div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item active" onclick="showScreen('learn')"><div class="nav-icon">📚</div>Learn</div>
+      <div class="nav-item" onclick="showScreen('practice')"><div class="nav-icon">✏️</div>Practice</div>
+      <div class="nav-item" onclick="showScreen('mock-list')"><div class="nav-icon">⏱️</div>Mock</div>
+      <div class="nav-item" onclick="showScreen('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ LESSON DETAIL -->
+  <div class="screen" id="screen-lesson">
+    <div class="topbar"><div class="topbar-back" onclick="showScreen('learn')">‹</div><h1>Map Reading</h1><div style="font-size:18px;cursor:pointer">⬇️</div></div>
+    <div class="scroll-body">
+      <div style="padding:12px 16px 0;display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;background:var(--green-light);color:var(--primary);font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid #c5d99a">Chapter 3</span>
+        <span style="font-size:12px;color:var(--text-soft)">8 min read</span>
+      </div>
+      <div class="lesson-content">
+        <h2>Conventional Signs & Symbols</h2>
+        <p>Conventional signs are standardised symbols used on topographical maps to represent physical and cultural features on the ground. Learning these symbols is essential for reading any military map.</p>
+        <div class="highlight">A topographical map uses a scale of 1:50,000, meaning 1 cm on the map equals 500 metres on the ground.</div>
+        <h3>Categories of Conventional Signs</h3>
+        <ul>
+          <li><strong>Natural features:</strong> Rivers, hills, forests, swamps</li>
+          <li><strong>Man-made features:</strong> Roads, railways, buildings, bridges</li>
+          <li><strong>Administrative:</strong> District boundaries, state lines</li>
+          <li><strong>Vegetation:</strong> Cultivated land, scrub, jungle</li>
+        </ul>
+        <h3>Relief Representation</h3>
+        <p>Contour lines join points of equal elevation. The vertical distance between two contour lines is called the <strong>Contour Interval (CI)</strong>. On a 1:50,000 map, the CI is typically 20 metres.</p>
+        <div class="highlight">Rule: Closely spaced contour lines = steep slope. Widely spaced = gentle slope.</div>
+        <p>Index contours (every 5th line) are drawn thicker and labelled with their elevation value.</p>
+      </div>
+      <div style="padding:0 16px 16px">
+        <button class="btn btn-primary btn-full" onclick="showXpToast('+10 XP');showScreen('practice')">Take comprehension quiz →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ PRACTICE -->
+  <div class="screen" id="screen-practice">
+    <div class="topbar"><div class="topbar-back" onclick="showScreen('home')">‹</div><h1>Practice</h1><div style="width:32px"></div></div>
+    <div class="filter-bar">
+      <div class="filter-chip active">All Subjects</div>
+      <div class="filter-chip">Map Reading</div>
+      <div class="filter-chip">Weapon Training</div>
+      <div class="filter-chip">Medium</div>
+      <div class="filter-chip">Hard</div>
+    </div>
+    <div class="scroll-body">
+      <div style="padding:10px 16px 4px;display:flex;gap:8px">
+        <div class="select-option selected" style="flex:1;padding:10px 12px;font-size:13px" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">10 Qs</div>
+        <div class="select-option" style="flex:1;padding:10px 12px;font-size:13px" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">25 Qs</div>
+        <div class="select-option" style="flex:1;padding:10px 12px;font-size:13px" onclick="this.parentElement.querySelectorAll('.select-option').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')">Browse</div>
+      </div>
+
+      <div class="question-body">
+        <div class="q-label">Question 7 of 10 · Map Reading</div>
+        <div class="q-stem">On a 1:50,000 topographical map, the contour interval is 20 metres. If a hill has 8 contour lines between its base and summit, what is the approximate height difference?</div>
+      </div>
+
+      <div class="options-list" id="practice-options">
+        <div class="option" onclick="selectPracticeAnswer(this, false)">
+          <div class="option-letter">A</div>
+          <div class="option-text">100 metres</div>
+        </div>
+        <div class="option" onclick="selectPracticeAnswer(this, false)">
+          <div class="option-letter">B</div>
+          <div class="option-text">120 metres</div>
+        </div>
+        <div class="option correct-answer" onclick="selectPracticeAnswer(this, true)">
+          <div class="option-letter">C</div>
+          <div class="option-text">160 metres</div>
+        </div>
+        <div class="option" onclick="selectPracticeAnswer(this, false)">
+          <div class="option-letter">D</div>
+          <div class="option-text">200 metres</div>
+        </div>
+      </div>
+
+      <div id="explanation-box" class="explanation-box" style="display:none">
+        <div class="ex-label">Explanation</div>
+        <p>Height difference = Number of contour intervals × CI = 8 × 20 = <strong>160 metres</strong>. Count intervals between lines, not the lines themselves.</p>
+      </div>
+
+      <div style="height:16px"></div>
+    </div>
+
+    <div class="mock-footer">
+      <div class="bookmark-btn" id="practice-bookmark" onclick="toggleBookmark('practice-bookmark')">🤍</div>
+      <button class="btn btn-outline" style="flex:1" onclick="showScreen('practice')">← Prev</button>
+      <button class="btn btn-primary" style="flex:1" onclick="showXpToast('+2 XP');showScreen('practice')">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ MOCK LIST -->
+  <div class="screen" id="screen-mock-list">
+    <div class="topbar"><div class="topbar-back" onclick="showScreen('home')">‹</div><h1>Mock Tests</h1><div style="width:32px"></div></div>
+    <div class="scroll-body" style="padding-top:12px">
+      <div class="card" style="background:var(--green-light);border:1px solid #c5d99a">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:13px;font-weight:700;color:var(--primary)">FREE</span>
+          <span style="font-size:12px;color:var(--text-soft)">1 mock per month remaining</span>
+        </div>
+        <div style="font-size:13px;color:var(--text-soft)">You have used 0 of 1 free mock this month</div>
+      </div>
+
+      <div style="padding:0 16px;display:flex;flex-direction:column;gap:10px">
+        <div style="background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer" onclick="showScreen('mock')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text)">B Certificate Full Mock</div>
+              <div style="font-size:12px;color:var(--text-soft);margin-top:2px">Army Wing · 50 questions</div>
+            </div>
+            <span style="background:var(--green-light);color:var(--primary);font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;border:1px solid #c5d99a">Free</span>
+          </div>
+          <div style="display:flex;gap:16px;font-size:12px;color:var(--text-soft);margin-bottom:12px">
+            <span>⏱️ 60 minutes</span>
+            <span>−0.25 negative marking</span>
+          </div>
+          <button class="btn btn-primary btn-full btn-sm">Start Mock Test</button>
+        </div>
+
+        <div style="background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;opacity:0.7" onclick="showScreen('paywall')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text)">B Certificate Mock #2</div>
+              <div style="font-size:12px;color:var(--text-soft);margin-top:2px">Army Wing · 50 questions</div>
+            </div>
+            <span style="background:var(--surface);color:var(--text-soft);font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;border:1px solid var(--border)">🔒 Pro</span>
+          </div>
+          <div style="display:flex;gap:16px;font-size:12px;color:var(--text-soft);margin-bottom:12px">
+            <span>⏱️ 60 minutes</span>
+            <span>−0.25 negative marking</span>
+          </div>
+          <button class="btn btn-gold btn-full btn-sm" onclick="event.stopPropagation();showScreen('paywall')">Upgrade to unlock</button>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="showScreen('learn')"><div class="nav-icon">📚</div>Learn</div>
+      <div class="nav-item" onclick="showScreen('practice')"><div class="nav-icon">✏️</div>Practice</div>
+      <div class="nav-item active" onclick="showScreen('mock-list')"><div class="nav-icon">⏱️</div>Mock</div>
+      <div class="nav-item" onclick="showScreen('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ MOCK TEST -->
+  <div class="screen" id="screen-mock">
+    <div class="mock-timer-bar">
+      <div class="timer-pill" id="mock-timer">⏱️ 58:42</div>
+      <div class="q-counter">Question 7 / 50</div>
+      <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;padding:6px 12px;font-size:12px" onclick="showScreen('mock-results')">Submit</button>
+    </div>
+    <div class="q-progress" id="mock-dots"></div>
+    <div class="scroll-body">
+      <div class="question-body">
+        <div class="q-label">Weapon Training · Medium</div>
+        <div class="q-stem">The effective range of the 5.56 mm INSAS Rifle in the automatic mode is —</div>
+      </div>
+      <div class="options-list" id="mock-options">
+        <div class="option" onclick="selectMockAnswer(this)">
+          <div class="option-letter">A</div>
+          <div class="option-text">200 metres</div>
+        </div>
+        <div class="option" onclick="selectMockAnswer(this)">
+          <div class="option-letter">B</div>
+          <div class="option-text">300 metres</div>
+        </div>
+        <div class="option" onclick="selectMockAnswer(this)">
+          <div class="option-letter">C</div>
+          <div class="option-text">400 metres</div>
+        </div>
+        <div class="option" onclick="selectMockAnswer(this)">
+          <div class="option-letter">D</div>
+          <div class="option-text">600 metres</div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <div class="mock-footer">
+      <div class="bookmark-btn" id="mock-bookmark" onclick="toggleBookmark('mock-bookmark')">🤍</div>
+      <button class="btn btn-outline" style="flex:1" onclick="showScreen('mock')">← Prev</button>
+      <button class="btn btn-primary" style="flex:1" onclick="showScreen('mock')">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ MOCK RESULTS -->
+  <div class="screen" id="screen-mock-results">
+    <div class="results-header">
+      <div class="results-title">B Certificate Full Mock — Score</div>
+      <div>
+        <span class="results-score">34.5</span>
+        <span class="results-max"> / 50</span>
+      </div>
+      <div class="results-badges">
+        <div class="result-badge"><div class="result-badge-val">Top 25%</div><div class="result-badge-label">Percentile</div></div>
+        <div class="result-badge"><div class="result-badge-val">38</div><div class="result-badge-label">Correct</div></div>
+        <div class="result-badge"><div class="result-badge-val">6</div><div class="result-badge-label">Wrong</div></div>
+        <div class="result-badge"><div class="result-badge-val">6</div><div class="result-badge-label">Skipped</div></div>
+      </div>
+    </div>
+    <div class="scroll-body" style="padding-top:12px">
+      <div style="margin:0 16px 12px;font-size:13px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.4px">Subject Breakdown</div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="subject-row">
+          <div class="subject-name">Map Reading</div>
+          <div class="progress-track" style="flex:1;margin:0 10px"><div class="progress-fill" style="width:72%"></div></div>
+          <div class="subject-score">72%</div>
+        </div>
+        <div class="subject-row">
+          <div class="subject-name">First Aid</div>
+          <div class="progress-track" style="flex:1;margin:0 10px"><div class="progress-fill" style="width:80%"></div></div>
+          <div class="subject-score">80%</div>
+        </div>
+        <div class="subject-row">
+          <div class="subject-name">Weapon Training</div>
+          <div class="progress-track" style="flex:1;margin:0 10px"><div class="progress-fill" style="width:38%;background:var(--red)"></div></div>
+          <div class="subject-score" style="color:var(--red)">38%</div>
+          <div class="weak-tag">Weak</div>
+        </div>
+        <div class="subject-row">
+          <div class="subject-name">Drill</div>
+          <div class="progress-track" style="flex:1;margin:0 10px"><div class="progress-fill" style="width:65%"></div></div>
+          <div class="subject-score">65%</div>
+        </div>
+      </div>
+
+      <div style="margin:0 16px 8px;font-size:13px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.4px">Unit Leaderboard — 1 Punjab Bn NCC</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:16px;font-weight:800;color:var(--gold);width:20px">1</div>
+            <div style="flex:1;font-size:14px;font-weight:600">Cdt Verma</div>
+            <div style="font-size:14px;font-weight:700;color:var(--primary)">41.25</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:var(--green-light);padding:6px 8px;border-radius:6px">
+            <div style="font-size:16px;font-weight:800;color:var(--primary);width:20px">2</div>
+            <div style="flex:1;font-size:14px;font-weight:700;color:var(--primary)">You (Cdt Sharma)</div>
+            <div style="font-size:14px;font-weight:800;color:var(--primary)">34.5</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:16px;font-weight:800;color:var(--text-soft);width:20px">3</div>
+            <div style="flex:1;font-size:14px;color:var(--text-soft)">Cdt Mishra</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-soft)">29.75</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 16px;display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn btn-outline" style="flex:1" onclick="showScreen('practice')">Practice weak topics</button>
+        <button class="btn btn-primary" style="flex:1" onclick="showScreen('home')">Back to home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ DRILL -->
+  <div class="screen" id="screen-drill">
+    <div class="topbar"><div class="topbar-back" onclick="showScreen('home')">‹</div><h1>Drill Movements</h1><div style="width:32px"></div></div>
+    <div class="scroll-body" style="padding-top:12px">
+      <div class="drill-card">
+        <div class="drill-thumb">🧍</div>
+        <div class="drill-info">
+          <div class="drill-title">Savdhan (Attention)</div>
+          <div class="drill-meta">45 sec · 8 steps</div>
+        </div>
+        <div class="drill-badge">✓ Free</div>
+      </div>
+      <div class="drill-card">
+        <div class="drill-thumb">🕴️</div>
+        <div class="drill-info">
+          <div class="drill-title">Vishram (Stand at Ease)</div>
+          <div class="drill-meta">30 sec · 5 steps</div>
+        </div>
+        <div class="drill-badge">✓ Free</div>
+      </div>
+      <div class="drill-card">
+        <div class="drill-thumb">↪️</div>
+        <div class="drill-info">
+          <div class="drill-title">Dahine Mur (Right Turn)</div>
+          <div class="drill-meta">60 sec · 10 steps</div>
+        </div>
+        <div class="drill-badge">✓ Free</div>
+      </div>
+      <div class="drill-card" onclick="showScreen('paywall')">
+        <div class="drill-thumb" style="background:#aaa">↩️</div>
+        <div class="drill-info">
+          <div class="drill-title">Baye Mur (Left Turn)</div>
+          <div class="drill-meta">60 sec · 10 steps</div>
+        </div>
+        <div class="drill-lock">🔒 Pro</div>
+      </div>
+      <div class="drill-card" onclick="showScreen('paywall')">
+        <div class="drill-thumb" style="background:#aaa">🔄</div>
+        <div class="drill-info">
+          <div class="drill-title">Peeche Mur (About Turn)</div>
+          <div class="drill-meta">90 sec · 12 steps</div>
+        </div>
+        <div class="drill-lock">🔒 Pro</div>
+      </div>
+      <div style="margin:8px 16px 16px">
+        <button class="btn btn-gold btn-full" onclick="showScreen('paywall')">Unlock all 18 movements — ₹99/mo</button>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="showScreen('learn')"><div class="nav-icon">📚</div>Learn</div>
+      <div class="nav-item" onclick="showScreen('practice')"><div class="nav-icon">✏️</div>Practice</div>
+      <div class="nav-item" onclick="showScreen('mock-list')"><div class="nav-icon">⏱️</div>Mock</div>
+      <div class="nav-item" onclick="showScreen('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ PROFILE -->
+  <div class="screen" id="screen-profile">
+    <div class="profile-header">
+      <div class="rank-badge">⭐⭐</div>
+      <div class="profile-name">Cadet Sharma</div>
+      <div class="profile-rank">Lance Corporal · B Certificate</div>
+      <div class="profile-unit">1 Punjab Battalion NCC · Army Wing</div>
+      <div style="margin-top:12px;background:rgba(201,169,97,0.2);border:1px solid rgba(201,169,97,0.4);border-radius:8px;padding:8px 14px;display:inline-flex;align-items:center;gap:8px">
+        <span style="color:var(--gold);font-size:13px;font-weight:600">⚡ 1,240 XP</span>
+        <span style="color:rgba(255,255,255,0.4)">·</span>
+        <span style="color:rgba(255,255,255,0.7);font-size:12px">760 XP to Corporal</span>
+      </div>
+    </div>
+    <div class="scroll-body" style="padding-top:12px">
+      <div class="stats-grid">
+        <div class="stat-cell"><div class="stat-val">🔥 12</div><div class="stat-label">Day Streak</div></div>
+        <div class="stat-cell"><div class="stat-val">3</div><div class="stat-label">Mocks Done</div></div>
+        <div class="stat-cell"><div class="stat-val">340</div><div class="stat-label">Questions</div></div>
+        <div class="stat-cell"><div class="stat-val">68%</div><div class="stat-label">Accuracy</div></div>
+        <div class="stat-cell"><div class="stat-val">2</div><div class="stat-label">Freezes 🧊</div></div>
+        <div class="stat-cell"><div class="stat-val">8</div><div class="stat-label">Lessons</div></div>
+      </div>
+
+      <div class="pro-card">
+        <div class="pro-info">
+          <div class="pro-title">Free Plan</div>
+          <div class="pro-sub">160 MCQs remaining this month</div>
+        </div>
+        <button class="btn btn-gold btn-sm" onclick="showScreen('paywall')">Upgrade</button>
+      </div>
+
+      <div style="background:white;border-radius:var(--radius);margin:0 16px 12px;overflow:hidden;box-shadow:var(--shadow)">
+        <div class="menu-row"><span class="menu-icon">🌐</span>Language: English<span class="menu-arrow">›</span></div>
+        <div class="menu-row"><span class="menu-icon">🎖️</span>My Bookmarks<span class="menu-arrow">›</span></div>
+        <div class="menu-row"><span class="menu-icon">📊</span>Progress Report<span class="menu-arrow">›</span></div>
+        <div class="menu-row" style="color:var(--red)"><span class="menu-icon">🚪</span>Log Out<span class="menu-arrow">›</span></div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="showScreen('learn')"><div class="nav-icon">📚</div>Learn</div>
+      <div class="nav-item" onclick="showScreen('practice')"><div class="nav-icon">✏️</div>Practice</div>
+      <div class="nav-item" onclick="showScreen('mock-list')"><div class="nav-icon">⏱️</div>Mock</div>
+      <div class="nav-item active" onclick="showScreen('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ PAYWALL -->
+  <div class="screen" id="screen-paywall">
+    <div class="topbar"><div class="topbar-back" onclick="history.back()||showScreen('home')">‹</div><h1>Cadet Pro</h1><div style="width:32px"></div></div>
+    <div class="scroll-body">
+      <div class="paywall-header">
+        <div style="font-size:36px;margin-bottom:8px">🎖️</div>
+        <div class="paywall-title">Unlock Full Preparation</div>
+        <div class="paywall-sub">Unlimited mocks, all MCQs, offline access, and every drill video</div>
+      </div>
+      <div style="padding:16px 0 8px">
+        <div class="plan-card featured selected" id="plan-seasonal" onclick="selectPlan('seasonal')">
+          <div class="plan-header">
+            <div>
+              <div class="plan-name">Seasonal Pass</div>
+              <div style="font-size:12px;color:var(--text-soft);margin-top:2px">Jan–Jun exam season</div>
+            </div>
+            <div class="plan-price">
+              <div class="plan-amount">₹499</div>
+              <div class="plan-period">one-time</div>
+            </div>
+          </div>
+          <div class="plan-features">
+            <div class="plan-feature">Unlimited mock tests</div>
+            <div class="plan-feature">All 2,000+ MCQs with explanations</div>
+            <div class="plan-feature">All 18 drill videos + checklists</div>
+            <div class="plan-feature">Offline download</div>
+            <div class="plan-feature">Full weak-topic analytics</div>
+          </div>
+        </div>
+        <div class="plan-card" id="plan-monthly" onclick="selectPlan('monthly')">
+          <div class="plan-header">
+            <div>
+              <div class="plan-name">Monthly</div>
+              <div style="font-size:12px;color:var(--text-soft);margin-top:2px">Auto-renews monthly</div>
+            </div>
+            <div class="plan-price">
+              <div class="plan-amount">₹99</div>
+              <div class="plan-period">per month</div>
+            </div>
+          </div>
+          <div class="plan-features">
+            <div class="plan-feature">Everything in Seasonal Pass</div>
+            <div class="plan-feature">Cancel anytime</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:0 16px 20px">
+        <button class="btn btn-gold btn-full" style="font-size:16px;padding:14px" onclick="showScreen('home')">Pay with UPI / Card →</button>
+        <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--text-soft)">Secure payment via Razorpay · Cancel anytime</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Screen navigation buttons below device -->
+<div class="screen-label">
+  <button class="screen-btn current" id="btn-onboard-welcome" onclick="showScreen('onboard-welcome')">Onboarding</button>
+  <button class="screen-btn" id="btn-home" onclick="showScreen('home')">Home</button>
+  <button class="screen-btn" id="btn-mock" onclick="showScreen('mock')">Mock Test</button>
+  <button class="screen-btn" id="btn-mock-results" onclick="showScreen('mock-results')">Results</button>
+  <button class="screen-btn" id="btn-practice" onclick="showScreen('practice')">Practice</button>
+  <button class="screen-btn" id="btn-learn" onclick="showScreen('learn')">Learn</button>
+  <button class="screen-btn" id="btn-drill" onclick="showScreen('drill')">Drill</button>
+  <button class="screen-btn" id="btn-profile" onclick="showScreen('profile')">Profile</button>
+  <button class="screen-btn" id="btn-paywall" onclick="showScreen('paywall')">Paywall</button>
+</div>
+
+<script>
+  // Generate mock test dots
+  const dotsEl = document.getElementById('mock-dots')
+  for (let i = 0; i < 50; i++) {
+    const d = document.createElement('div')
+    d.className = 'q-dot' + (i < 6 ? ' answered' : '') + (i === 6 ? ' current' : '')
+    dotsEl.appendChild(d)
+  }
+
+  // Timer countdown
+  let seconds = 58 * 60 + 42
+  setInterval(() => {
+    if (seconds > 0) seconds--
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    const timerEl = document.getElementById('mock-timer')
+    if (timerEl) {
+      timerEl.textContent = `⏱️ ${m}:${String(s).padStart(2, '0')}`
+      timerEl.className = 'timer-pill' + (seconds < 300 ? ' warning' : '')
+    }
+  }, 1000)
+
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'))
+    const target = document.getElementById('screen-' + name)
+    if (target) target.classList.add('active')
+
+    document.querySelectorAll('.screen-btn').forEach(b => b.classList.remove('current'))
+    const btn = document.getElementById('btn-' + name)
+    if (btn) btn.classList.add('current')
+  }
+
+  function selectMockAnswer(el) {
+    document.querySelectorAll('#mock-options .option').forEach(o => o.classList.remove('selected'))
+    el.classList.add('selected')
+    el.querySelector('.option-letter').style.background = 'var(--primary)'
+    el.querySelector('.option-letter').style.color = 'white'
+  }
+
+  let practiceAnswered = false
+  function selectPracticeAnswer(el, isCorrect) {
+    if (practiceAnswered) return
+    practiceAnswered = true
+    document.querySelectorAll('#practice-options .option').forEach(o => {
+      if (o.classList.contains('correct-answer')) {
+        o.classList.add('correct')
+        o.querySelector('.option-letter').style.background = '#27ae60'
+        o.querySelector('.option-letter').style.color = 'white'
+      }
+    })
+    if (!isCorrect) {
+      el.classList.add('wrong')
+      el.querySelector('.option-letter').style.background = 'var(--red)'
+      el.querySelector('.option-letter').style.color = 'white'
+    }
+    document.getElementById('explanation-box').style.display = 'block'
+    if (isCorrect) showXpToast('+2 XP')
+    setTimeout(() => { practiceAnswered = false }, 2000)
+  }
+
+  function toggleBookmark(id) {
+    const btn = document.getElementById(id)
+    const active = btn.classList.toggle('active')
+    btn.textContent = active ? '🔖' : '🤍'
+    if (active) showXpToast('Bookmarked!')
+  }
+
+  function showXpToast(msg) {
+    const toast = document.getElementById('xp-toast')
+    toast.textContent = msg
+    toast.classList.add('show')
+    setTimeout(() => toast.classList.remove('show'), 1800)
+  }
+
+  function selectPlan(plan) {
+    document.getElementById('plan-seasonal').classList.remove('selected')
+    document.getElementById('plan-monthly').classList.remove('selected')
+    document.getElementById('plan-' + plan).classList.add('selected')
+  }
+</script>
+</body>
+</html>
