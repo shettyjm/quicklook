@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadet Drill — NCC Prep Platform Strategy</title>
+<style>
+  :root {
+    --olive: #4a5d23;
+    --olive-dark: #2f3d15;
+    --olive-light: #7a8c4c;
+    --sand: #f5f1e8;
+    --cream: #faf7f0;
+    --ink: #1c1c1a;
+    --ink-soft: #4a4a46;
+    --ink-mute: #7a7a74;
+    --accent: #c9a961;
+    --line: #d9d4c5;
+    --card: #ffffff;
+    --success: #2d7d4f;
+    --danger: #a63d2a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* Header */
+  .masthead {
+    background: var(--olive-dark);
+    color: var(--sand);
+    padding: 56px 32px 72px;
+    border-bottom: 6px solid var(--accent);
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(201,169,97,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .masthead-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  h1 .accent { color: var(--accent); }
+  .tagline {
+    font-size: 20px;
+    color: rgba(245,241,232,0.85);
+    max-width: 720px;
+    margin-bottom: 28px;
+  }
+  .meta-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill {
+    background: rgba(245,241,232,0.1);
+    border: 1px solid rgba(245,241,232,0.25);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--sand);
+  }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+  section { margin-bottom: 56px; }
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--olive-dark);
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+  }
+  h2 .num {
+    color: var(--ink-mute);
+    font-weight: 400;
+    font-size: 18px;
+    margin-right: 10px;
+    letter-spacing: 0;
+  }
+  .section-sub {
+    color: var(--ink-mute);
+    margin: 0 0 24px 18px;
+    font-size: 15px;
+  }
+  h3 {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--olive-dark);
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  p.lead { font-size: 17px; color: var(--ink); }
+
+  /* Callout box */
+  .callout {
+    background: var(--sand);
+    border-left: 4px solid var(--olive);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .callout.warn { border-left-color: var(--accent); }
+  .callout strong { color: var(--olive-dark); }
+
+  /* Stat band */
+  .stat-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--olive);
+    padding: 22px 18px;
+    border-radius: 8px;
+  }
+  .stat-num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--olive-dark);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.4;
+  }
+
+  /* Cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 20px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 22px 22px 24px;
+    border-radius: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(47,61,21,0.08); }
+  .card-title {
+    font-weight: 700;
+    color: var(--olive-dark);
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-badge {
+    display: inline-block;
+    background: var(--olive);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 13px;
+    text-align: center;
+    line-height: 26px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .card-body { font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin: 16px 0 8px; border: 1px solid var(--line); border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); }
+  th {
+    background: var(--olive-dark);
+    color: var(--sand);
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 14px 16px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(245,241,232,0.4); }
+  td strong { color: var(--olive-dark); }
+
+  /* Roadmap */
+  .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 24px 0; }
+  .phase {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 24px 22px;
+    position: relative;
+  }
+  .phase:first-child { border-radius: 10px 0 0 10px; }
+  .phase:last-child { border-radius: 0 10px 10px 0; }
+  .phase:not(:last-child) { border-right: none; }
+  .phase-num {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--olive-dark);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .phase-title { font-size: 18px; font-weight: 700; color: var(--olive-dark); margin-bottom: 6px; }
+  .phase-window { font-size: 13px; color: var(--ink-mute); margin-bottom: 14px; font-style: italic; }
+  .phase ul { list-style: none; padding: 0; }
+  .phase li {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    padding: 6px 0 6px 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .phase li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 12px;
+    width: 8px; height: 8px;
+    border: 1.5px solid var(--olive);
+    border-radius: 2px;
+  }
+
+  /* Pricing grid */
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0; }
+  .tier {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px 22px;
+    text-align: center;
+  }
+  .tier.feature { border: 2px solid var(--accent); position: relative; }
+  .tier.feature::before {
+    content: "RECOMMENDED";
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--olive-dark);
+    padding: 3px 12px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .tier-name { font-size: 14px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 10px; }
+  .tier-price { font-size: 36px; font-weight: 700; color: var(--olive-dark); margin-bottom: 4px; }
+  .tier-price .unit { font-size: 14px; color: var(--ink-mute); font-weight: 400; }
+  .tier-sub { font-size: 13px; color: var(--ink-mute); margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .tier-feat { text-align: left; font-size: 13.5px; color: var(--ink-soft); padding: 5px 0; padding-left: 20px; position: relative; }
+  .tier-feat::before { content: "✓"; color: var(--success); font-weight: 700; position: absolute; left: 0; top: 4px; }
+
+  /* Matrix */
+  .compare-table th:first-child, .compare-table td:first-child { font-weight: 600; background: rgba(245,241,232,0.6); }
+  .yes { color: var(--success); font-weight: 600; }
+  .no { color: var(--danger); }
+  .partial { color: var(--accent); font-weight: 600; }
+
+  /* TOC */
+  .toc {
+    background: var(--sand);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+  .toc-title { font-weight: 700; color: var(--olive-dark); font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .toc ol { list-style: none; padding: 0; counter-reset: toc-counter; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+  .toc li { counter-increment: toc-counter; padding-left: 28px; position: relative; font-size: 14px; }
+  .toc li::before {
+    content: counter(toc-counter, decimal-leading-zero);
+    position: absolute; left: 0; top: 0;
+    color: var(--accent); font-weight: 700; font-size: 12px;
+  }
+  .toc a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  .toc a:hover { color: var(--olive-dark); border-bottom-color: var(--olive); }
+
+  /* Two-col */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 16px; }
+  .col-title { font-size: 13px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+
+  /* Footer */
+  .cta-band {
+    background: var(--olive-dark);
+    color: var(--sand);
+    padding: 48px 32px;
+    text-align: center;
+    border-top: 4px solid var(--accent);
+  }
+  .cta-band h2 { color: var(--sand); border: none; padding: 0; margin-bottom: 12px; }
+  .cta-band p { color: rgba(245,241,232,0.8); max-width: 680px; margin: 0 auto 16px; }
+  .sig {
+    font-size: 12px;
+    color: rgba(245,241,232,0.5);
+    margin-top: 24px;
+    letter-spacing: 1px;
+  }
+
+  /* Quote */
+  .quote {
+    border-left: 3px solid var(--accent);
+    padding: 14px 20px;
+    margin: 16px 0;
+    font-style: italic;
+    color: var(--ink-soft);
+    background: rgba(245,241,232,0.4);
+    border-radius: 0 6px 6px 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 780px) {
+    h1 { font-size: 36px; }
+    .masthead { padding: 36px 20px 50px; }
+    .container { padding: 32px 20px; }
+    .stat-band { grid-template-columns: repeat(2, 1fr); }
+    .roadmap { grid-template-columns: 1fr; }
+    .phase:first-child, .phase:last-child { border-radius: 10px; }
+    .phase:not(:last-child) { border-right: 1px solid var(--line); margin-bottom: 0; border-bottom: none; }
+    .pricing { grid-template-columns: 1fr; }
+    .toc ol { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .masthead { background: white; color: var(--ink); border-bottom: 2px solid var(--olive-dark); }
+    .masthead-inner * { color: var(--ink) !important; }
+    .cta-band { background: white; color: var(--ink); }
+    .cta-band * { color: var(--ink) !important; }
+    body { background: white; }
+    section, .card, .phase, .tier, .stat { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="eyebrow">Strategy &amp; MVP Plan · April 2026</div>
+    <h1>Cadet Drill<span class="accent">.</span></h1>
+    <p class="tagline">A next-gen preparation platform for India's 17 lakh NCC cadets. Simple pricing, mobile-first, built to scale into NDA, CDS and SSB.</p>
+    <div class="meta-pills">
+      <span class="pill">For NCC A / B / C certificates</span>
+      <span class="pill">MVP in 6 weeks</span>
+      <span class="pill">₹99 – ₹499 entry pricing</span>
+      <span class="pill">Offline-first</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-title">What's inside</div>
+  <ol>
+    <li><a href="#opportunity">Market opportunity</a></li>
+    <li><a href="#problem">The problem today</a></li>
+    <li><a href="#persona">Who we're building for</a></li>
+    <li><a href="#product">Product positioning</a></li>
+    <li><a href="#mvp">MVP scope (6 weeks)</a></li>
+    <li><a href="#features">Feature stack</a></li>
+    <li><a href="#tech">Tech architecture</a></li>
+    <li><a href="#pricing">Pricing model</a></li>
+    <li><a href="#gtm">Go-to-market</a></li>
+    <li><a href="#roadmap">Growth roadmap</a></li>
+    <li><a href="#risk">Risks &amp; mitigations</a></li>
+    <li><a href="#success">Success metrics</a></li>
+  </ol>
+</nav>
+
+<!-- 1. Opportunity -->
+<section id="opportunity">
+  <h2><span class="num">01</span>Market opportunity</h2>
+  <p class="section-sub">A captive audience, an annual exam cycle, and no modern competition.</p>
+
+  <p class="lead">The National Cadet Corps is the world's largest uniformed youth organisation. Defence Minister Rajnath Singh has approved expansion to <strong>20 lakh (2 million) cadets</strong>, up from the current ~17 lakh. Every year, roughly 1.5–2 lakh cadets sit for the A, B, and C certificate exams held in January–February. Yet there is no single app purpose-built for them.</p>
+
+  <div class="stat-band">
+    <div class="stat"><div class="stat-num">~17L</div><div class="stat-label">Cadets currently enrolled nationwide</div></div>
+    <div class="stat"><div class="stat-num">20L</div><div class="stat-label">Sanctioned strength (target expansion)</div></div>
+    <div class="stat"><div class="stat-num">~2L</div><div class="stat-label">Aspirants appearing for A/B/C exams yearly</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Dedicated modern mobile apps in the category</div></div>
+  </div>
+
+  <h3>Why this is underserved</h3>
+  <p>The NCC prep market today is fragmented across scanned PDFs, handwritten notes shared on WhatsApp, unstructured YouTube playlists, and paper booklets sold at ₹100–150 per paper. There is no Duolingo-style structured learning, no progress tracking, and no way for a cadet in a rural town to access the same quality of preparation as one in Delhi. A well-designed app captures this entire market by default — the bar is low, and the audience is captive.</p>
+
+  <div class="callout">
+    <strong>The wedge:</strong> Win NCC first (small, focused, low competition). Then expand outward to NDA, CDS, AFCAT, and SSB — where the same defence-aspirant persona pays significantly more and competition is fierce but fragmented. NCC becomes the top of the funnel.
+  </div>
+</section>
+
+<!-- 2. Problem -->
+<section id="problem">
+  <h2><span class="num">02</span>The problem today</h2>
+  <p class="section-sub">What cadets actually do when the exam date approaches.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-title"><span class="card-badge">1</span>Scattered PDFs</div>
+      <div class="card-body">Cadets rely on WhatsApp-forwarded scanned PDFs of unknown vintage. Questions, options, and answers are often written by hand in the margins. No way to know if content is current.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">2</span>No structure</div>
+      <div class="card-body">No syllabus mapping, no chapter progression, no way to know what's been covered or what's weak. Cadets open a PDF and guess where to start.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">3</span>Paper pricing</div>
+      <div class="card-body">Competitor apps like Tejas NCC Academy charge ~₹150 per paper. For a student from a rural area, that adds up fast across 4+ subject papers.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">4</span>Zero feedback</div>
+      <div class="card-body">Reading a PDF gives no feedback. There's no "here's what you got wrong and here's what to do about it" — which is exactly what a timed, negative-marked exam punishes.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">5</span>Drill practice is manual</div>
+      <div class="card-body">Drill and practical training is taught only in parades and camps. No one revisits it between sessions. Muscle memory fades, and procedural knowledge drops out of working memory.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">6</span>Rural friction</div>
+      <div class="card-body">Limited bandwidth, entry-level Android phones, irregular data packs. Most "edtech" apps assume a metro user with an iPhone and unlimited Jio. This audience doesn't.</div>
+    </div>
+  </div>
+
+  <div class="quote">"Every phone has something like Duolingo now. Points, streaks, progress shown plainly. Why doesn't NCC have that?" — field note from a cadet workshop (200 participants)</div>
+</section>
+
+<!-- 3. Persona -->
+<section id="persona">
+  <h2><span class="num">03</span>Who we're building for</h2>
+  <p class="section-sub">The primary user — and what they look like on a Wednesday evening.</p>
+
+  <div class="two-col">
+    <div>
+      <div class="col-title">Primary · The exam-bound cadet</div>
+      <p><strong>Age 15–21.</strong> School (Class 9–12) or first-year college. Lives in a Tier 2/3 town or rural district. Parade time is fixed; exam is the bottleneck. Owns an entry-level Android (4–6 GB RAM). Data is metered. Watches YouTube in Hindi or their mother tongue. Willing to pay ₹99–499 for something that feels valuable. Not willing to pay ₹1,000+ for a course.</p>
+    </div>
+    <div>
+      <div class="col-title">Secondary · The ANO &amp; instructor</div>
+      <p>Associate NCC Officer, PI staff, or school teacher doubling as NCC in-charge. Wants their cadets to perform well — their unit's reputation depends on exam pass rates. Will recommend the app if it demonstrably helps. May adopt institutional plans if priced for a full unit (50–200 cadets).</p>
+    </div>
+  </div>
+
+  <h3>Jobs to be done</h3>
+  <p>When a cadet picks up this app, they are hiring it to do one of three things: <strong>(a)</strong> make them pass the certificate exam with a good grade, <strong>(b)</strong> help them retain drill and subject knowledge between parades, <strong>(c)</strong> build a foundation that carries into NDA/CDS prep later. The MVP has to deliver on (a) cleanly. Everything else is a bonus.</p>
+</section>
+
+<!-- 4. Product positioning -->
+<section id="product">
+  <h2><span class="num">04</span>Product positioning</h2>
+  <p class="section-sub">The one-line pitch.</p>
+
+  <div class="callout warn">
+    <strong>Positioning statement:</strong> Cadet Drill is a mobile-first preparation platform for NCC cadets that replaces scattered PDFs with structured lessons, timed mock tests, and practical drill guides — at a price any cadet can afford.
+  </div>
+
+  <h3>What it is, what it isn't</h3>
+  <div class="two-col">
+    <div>
+      <div class="col-title">It is</div>
+      <p>A focused, mobile-native, offline-capable prep tool. Short lessons, adaptive quizzes, honest progress tracking. Works on a ₹8,000 Android with patchy 4G. Feels like training, not reading.</p>
+    </div>
+    <div>
+      <div class="col-title">It isn't</div>
+      <p>A video-lecture library. A social network for cadets. A replacement for the parade ground. A bloated course platform. An AI chatbot wrapper. Every feature that doesn't help a cadet pass their exam gets deferred to v2 or killed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. MVP Scope -->
+<section id="mvp">
+  <h2><span class="num">05</span>MVP scope (6 weeks)</h2>
+  <p class="section-sub">The smallest product that demonstrably helps a cadet pass the exam.</p>
+
+  <p>The MVP should be small enough to build in six weeks with one developer plus Claude Code, and sharp enough that 100 cadets in a pilot say "this is useful — when is the next release?" Scope discipline is the most important decision at this stage. The list below is what ships in v1. Everything else waits.</p>
+
+  <h3>What ships in v1</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-title"><span class="card-badge">1</span>Onboarding &amp; goal set</div>
+      <div class="card-body">Pick wing (Army / Navy / Air). Pick target certificate (A / B / C). Get a tailored study path. No signup wall — phone OTP only.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">2</span>Structured syllabus</div>
+      <div class="card-body">Subjects → chapters → short (3–5 min) lessons. Each lesson ends with a 5-question check-for-understanding quiz. Skip-forward not allowed until the quiz is passed.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">3</span>MCQ bank (2,000+ Qs)</div>
+      <div class="card-body">Tagged by subject, chapter, difficulty, certificate level. Explanations on every question. This is the heart of the product — the thing most cadets will spend the most time in.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">4</span>Timed mock tests</div>
+      <div class="card-body">Full-length mock papers with negative marking (−0.25 per wrong answer, matching the real exam). Post-test analytics: weak topics, time-per-question, percentile vs peers.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">5</span>Drill video guides</div>
+      <div class="card-body">Short (30–90s) clips for each drill movement, with a step-by-step checklist cadets can tick off while practising. No fancy AI posture detection yet — just good content, well indexed.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">6</span>Progress &amp; streaks</div>
+      <div class="card-body">XP, day streak, rank badges (Cadet → Lance Corporal → Corporal → Sergeant). Weekly summary: "You mastered 12 topics this week." The dopamine layer that keeps cadets opening the app.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">7</span>Offline mode</div>
+      <div class="card-body">Lessons, quizzes, and mocks downloadable for offline use. Progress syncs when the cadet comes back online. Non-negotiable — this is what makes the app viable in rural districts.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">8</span>Bilingual from day one</div>
+      <div class="card-body">English + Hindi at launch. Add a third language (Tamil or Telugu) after pilot feedback confirms demand. All MCQs stored with translation fields, not just English.</div>
+    </div>
+  </div>
+
+  <h3>Explicitly NOT in v1</h3>
+  <p>Live classes. Community / chat / forums. AI tutor. Creator tools for teachers. Video lectures longer than 5 minutes. Web app (mobile-first; web comes in Phase 2). Referral program. Coupon engine. Scholarship tracking. All of these are worth building — just not before we know cadets open the app 4 times a week.</p>
+</section>
+
+<!-- 6. Feature stack comparison -->
+<section id="features">
+  <h2><span class="num">06</span>Feature stack &amp; how we win</h2>
+  <p class="section-sub">Where we beat the existing options on the dimensions cadets care about.</p>
+
+  <div class="table-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>PDF notes &amp; WhatsApp groups</th>
+          <th>Tejas-style paper PDFs (~₹150)</th>
+          <th>Generic edtech apps (Unacademy etc.)</th>
+          <th>Cadet Drill (this platform)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Structured syllabus mapped to A/B/C</td>
+          <td class="no">No</td>
+          <td class="partial">Partial</td>
+          <td class="no">Not NCC-specific</td>
+          <td class="yes">Built in</td>
+        </tr>
+        <tr>
+          <td>Timed mocks with negative marking</td>
+          <td class="no">No</td>
+          <td class="no">Paper only</td>
+          <td class="partial">Not for NCC</td>
+          <td class="yes">Exact exam pattern</td>
+        </tr>
+        <tr>
+          <td>Offline-first mobile UX</td>
+          <td class="partial">PDFs, manually</td>
+          <td class="no">No</td>
+          <td class="partial">Limited</td>
+          <td class="yes">Core architecture</td>
+        </tr>
+        <tr>
+          <td>Drill video + checklist</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="yes">Yes</td>
+        </tr>
+        <tr>
+          <td>Progress tracking, weak-topic feedback</td>
+          <td class="no">None</td>
+          <td class="no">None</td>
+          <td class="yes">Yes (generic)</td>
+          <td class="yes">NCC-tuned</td>
+        </tr>
+        <tr>
+          <td>Bilingual / regional languages</td>
+          <td class="partial">Depends on source</td>
+          <td class="partial">Usually Hindi</td>
+          <td class="partial">Some</td>
+          <td class="yes">English + Hindi v1</td>
+        </tr>
+        <tr>
+          <td>Entry price</td>
+          <td>Free (but poor)</td>
+          <td>~₹150/paper</td>
+          <td>₹1,000+/month</td>
+          <td class="yes">Free tier + ₹99/month</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size: 13px; color: var(--ink-mute); margin-top: 8px;">Cadets don't pick the "best app." They pick the one a friend showed them that worked. Our job is to make that first-week experience so good that sharing is automatic.</p>
+</section>
+
+<!-- 7. Tech -->
+<section id="tech">
+  <h2><span class="num">07</span>Tech architecture</h2>
+  <p class="section-sub">Boring, shippable, and scales to 10 lakh users without a rewrite.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Choice</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Mobile app</strong></td>
+          <td>Flutter</td>
+          <td>One codebase → Android + iOS. Fast iteration. Good performance on entry-level devices. Large talent pool in India.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend (MVP)</strong></td>
+          <td>Supabase (Postgres + Auth + Storage)</td>
+          <td>Zero devops for the first 6 months. Phone OTP auth built in. Row-level security. Switchable to self-hosted Postgres later without rewriting.</td>
+        </tr>
+        <tr>
+          <td><strong>Content delivery</strong></td>
+          <td>Cloudflare R2 + CDN</td>
+          <td>Video and image assets served cheaply. Zero egress fees matter a lot when traffic scales.</td>
+        </tr>
+        <tr>
+          <td><strong>Offline cache</strong></td>
+          <td>Drift (SQLite for Flutter)</td>
+          <td>Type-safe, schema-migrated local DB. Sync resolver runs on login and on manual pull.</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>PostHog (self-hostable) + Supabase events</td>
+          <td>Product analytics without sending cadet data to ad networks. Funnels and retention cohorts out of the box.</td>
+        </tr>
+        <tr>
+          <td><strong>Payments</strong></td>
+          <td>Razorpay + UPI Autopay</td>
+          <td>UPI is the only payment method that matters for this audience. Autopay for subscriptions. No card friction.</td>
+        </tr>
+        <tr>
+          <td><strong>Push / reminders</strong></td>
+          <td>Firebase Cloud Messaging</td>
+          <td>Free, reliable, works on every Android. Used for streak reminders and exam countdown.</td>
+        </tr>
+        <tr>
+          <td><strong>AI layer (later)</strong></td>
+          <td>Claude API for adaptive quiz generation &amp; explanation drafts</td>
+          <td>Not in MVP. In v2, use Claude to generate explanation drafts for MCQs and to build adaptive-difficulty practice sessions.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>Build approach:</strong> Use Claude Code for the full stack — scaffolding Flutter, writing Supabase migrations, generating MCQ seed data from the existing PDF bank, writing tests. A single developer with Claude Code should ship the MVP in 6 focused weeks.
+  </div>
+</section>
+
+<!-- 8. Pricing -->
+<section id="pricing">
+  <h2><span class="num">08</span>Pricing model</h2>
+  <p class="section-sub">Radically simple. No matrix. No "contact sales."</p>
+
+  <p>Three tiers, one page, one-tap checkout. The free tier is not a trial — it's genuinely useful so cadets start using it without friction. Paid tiers unlock the two things that most move the needle on exam performance: unlimited mock tests and advanced analytics.</p>
+
+  <div class="pricing">
+    <div class="tier">
+      <div class="tier-name">Free forever</div>
+      <div class="tier-price">₹0</div>
+      <div class="tier-sub">No credit card required</div>
+      <div class="tier-feat">All lessons &amp; quizzes</div>
+      <div class="tier-feat">500 MCQs from the bank</div>
+      <div class="tier-feat">1 full mock test per month</div>
+      <div class="tier-feat">Basic progress tracking</div>
+      <div class="tier-feat">Hindi + English</div>
+    </div>
+    <div class="tier feature">
+      <div class="tier-name">Cadet Pro</div>
+      <div class="tier-price">₹99<span class="unit">/month</span></div>
+      <div class="tier-sub">or ₹499 for the full exam season (6 months)</div>
+      <div class="tier-feat">Everything in free</div>
+      <div class="tier-feat">Unlimited MCQ practice</div>
+      <div class="tier-feat">Unlimited timed mocks</div>
+      <div class="tier-feat">Weak-area analytics</div>
+      <div class="tier-feat">Drill video library</div>
+      <div class="tier-feat">Offline download</div>
+    </div>
+    <div class="tier">
+      <div class="tier-name">Unit plan</div>
+      <div class="tier-price">₹5k<span class="unit">/unit/yr</span></div>
+      <div class="tier-sub">For schools, colleges, NCC units (up to 100 cadets)</div>
+      <div class="tier-feat">Everything in Cadet Pro</div>
+      <div class="tier-feat">Instructor dashboard</div>
+      <div class="tier-feat">Unit-level leaderboards</div>
+      <div class="tier-feat">Bulk enrolment</div>
+      <div class="tier-feat">Priority support</div>
+    </div>
+  </div>
+
+  <h3>Pricing logic</h3>
+  <p>At ₹99/month, a cadet pays less than a single paper PDF from Tejas (~₹150) — and gets an entire app with unlimited practice. The ₹499 seasonal bundle is the tier most cadets will actually buy: it covers the full exam run-up from August to February. The ₹5,000/unit institutional tier is a high-margin, low-volume upsell that lets us sell to ANOs and principals for ~₹50/cadet — an easier budget conversation than 100 individual ₹499 payments.</p>
+</section>
+
+<!-- 9. GTM -->
+<section id="gtm">
+  <h2><span class="num">09</span>Go-to-market</h2>
+  <p class="section-sub">Where the first 10,000 users come from.</p>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-title"><span class="card-badge">1</span>Workshop pilot</div>
+      <div class="card-body"><strong>Weeks 1–6 post-MVP.</strong> Run the Cadet Drill app at Pavan's existing 200-cadet workshops. Onboard every attendee. Watch what they do. Fix everything that breaks. Zero paid acquisition — this is product-discovery disguised as distribution.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">2</span>ANO &amp; instructor outreach</div>
+      <div class="card-body">Warm intros through the UP directorate and existing instructor networks. Send each ANO a demo link, a one-pager, and an offer to onboard their full unit free for 60 days. A single enthusiastic ANO can bring 100+ cadets.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">3</span>WhatsApp &amp; Telegram seeding</div>
+      <div class="card-body">Where cadets already are. Join the 50+ existing NCC prep Telegram groups. Don't spam — share genuinely useful free content (a "practice 10 MCQs a day" bot, a drill checklist PDF) with a soft link to the app.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">4</span>YouTube &amp; short-form</div>
+      <div class="card-body">A channel that answers the top 50 search queries ("NCC B certificate syllabus 2026", "drill movements in Hindi", etc.). One video a week, sub-5 minutes, optimised for the Indian YouTube algorithm. App link in every description.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">5</span>Exam-season campaigns</div>
+      <div class="card-body">Paid ads turn on only from November to February — the three months before the main exam. Meta + YouTube Shorts, ₹20–50 CPL target. Rest of year stays organic.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-badge">6</span>Referral loop</div>
+      <div class="card-body"><strong>v2.</strong> Every free-tier cadet gets a shareable unit code. Any friend who signs up with that code gives both cadets a month of Pro free. Kicks in only after we know retention is solid.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Roadmap -->
+<section id="roadmap">
+  <h2><span class="num">10</span>Growth roadmap</h2>
+  <p class="section-sub">From MVP to the broader defence-aspirant ecosystem.</p>
+
+  <div class="roadmap">
+    <div class="phase">
+      <span class="phase-num">PHASE 1</span>
+      <div class="phase-title">Ship &amp; prove</div>
+      <div class="phase-window">Month 0–3</div>
+      <ul>
+        <li>MVP built with Claude Code (6 weeks)</li>
+        <li>Pilot at Pavan's 200-cadet workshop</li>
+        <li>2,000 MCQs seeded and reviewed</li>
+        <li>100 pilot users, 40%+ weekly active</li>
+        <li>First ₹ earned from Cadet Pro</li>
+        <li>Instrument everything; watch retention</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <span class="phase-num">PHASE 2</span>
+      <div class="phase-title">Scale within NCC</div>
+      <div class="phase-window">Month 4–12</div>
+      <ul>
+        <li>10k paid users across India</li>
+        <li>Unit &amp; institutional plans launched</li>
+        <li>Add Tamil + Telugu languages</li>
+        <li>Adaptive quizzes powered by Claude</li>
+        <li>Instructor dashboard + bulk onboarding</li>
+        <li>Referral loop turned on</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <span class="phase-num">PHASE 3</span>
+      <div class="phase-title">Expand beyond NCC</div>
+      <div class="phase-window">Year 2+</div>
+      <ul>
+        <li>Launch NDA / CDS / AFCAT modules</li>
+        <li>SSB interview prep track</li>
+        <li>Community &amp; peer-practice features</li>
+        <li>Live classes with ex-officers</li>
+        <li>Web app for desktop practice</li>
+        <li>Target ₹5+ Cr ARR by end of Year 2</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 11. Risks -->
+<section id="risk">
+  <h2><span class="num">11</span>Risks &amp; mitigations</h2>
+  <p class="section-sub">What could kill this, and what we'll do about it.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Content accuracy</strong> — MCQs or lesson facts are wrong, cadets fail because of us</td>
+          <td>Medium</td>
+          <td>Every question and lesson reviewed by at least one serving/retired ANO before publishing. User-reportable errors with a 48h SLA to fix.</td>
+        </tr>
+        <tr>
+          <td><strong>Syllabus revision</strong> — NCC changes its syllabus and our content becomes stale overnight</td>
+          <td>Medium</td>
+          <td>Build content as versioned, tagged data (not baked into the app). Every piece of content has a "valid for [exam year]" field. Hot updates without app releases.</td>
+        </tr>
+        <tr>
+          <td><strong>Willingness to pay</strong> — cadets from rural/low-income backgrounds won't convert to paid</td>
+          <td>Medium-High</td>
+          <td>Aggressive free tier (genuinely useful). Seasonal ₹499 bundle priced below one paper PDF. Unit plans sold to ANOs so the cadet doesn't pay directly.</td>
+        </tr>
+        <tr>
+          <td><strong>Someone big enters the space</strong> — Unacademy, BYJU'S, PhysicsWallah launch an NCC vertical</td>
+          <td>Low-Medium</td>
+          <td>Move fast. Win the first 50k cadets before anyone notices. Deep NCC-specific features (drill videos, unit dashboards) are hard to copy without domain expertise.</td>
+        </tr>
+        <tr>
+          <td><strong>Content generation effort</strong> — seeding 2,000 MCQs from scratch is expensive</td>
+          <td>High</td>
+          <td>Use Claude to generate MCQ drafts from existing PDFs/handbooks, reviewed by a subject-matter editor. 10× faster than writing from scratch.</td>
+        </tr>
+        <tr>
+          <td><strong>Payment failures on entry-level phones</strong> — UPI Autopay setup fails on older Android</td>
+          <td>Low</td>
+          <td>Offer one-time ₹499 seasonal pass as the primary purchase flow; subscription is secondary. Fewer moving parts = fewer failure modes.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 12. Success -->
+<section id="success">
+  <h2><span class="num">12</span>Success metrics</h2>
+  <p class="section-sub">What we'll look at to know if this is working.</p>
+
+  <div class="stat-band">
+    <div class="stat">
+      <div class="stat-num">40%</div>
+      <div class="stat-label">Week-4 retention for new signups (pilot target)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">10%</div>
+      <div class="stat-label">Free → paid conversion in the first exam season</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3x</div>
+      <div class="stat-label">Mock test scores: users on the app vs non-users</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">50k</div>
+      <div class="stat-label">Monthly active cadets by end of Year 1</div>
+    </div>
+  </div>
+
+  <h3>North Star metric</h3>
+  <p>The single number the team watches weekly: <strong>"Weekly Active Cadets who completed at least one timed mock."</strong> This captures genuine value — not just opens or lesson views, but the behaviour most correlated with exam success. If this number is growing, the rest of the metrics will follow.</p>
+</section>
+
+</div>
+
+<footer class="cta-band">
+  <h2>Next steps</h2>
+  <p>The market is ready, the problem is real, and the build is small enough to ship in six weeks. The only thing standing between today and 50k cadets is a clean MVP, honest pricing, and a tight feedback loop with Pavan's existing workshop pipeline.</p>
+  <p><strong>Immediate:</strong> lock down MVP scope, start Claude Code build, begin MCQ content seeding in parallel.</p>
+  <div class="sig">Cadet Drill · Strategy v0.1 · Prepared April 2026</div>
+</footer>
+
+</body>
+</html>
