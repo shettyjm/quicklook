@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Madhuvana | Science Bee Platform for Kids</title>
+  <meta name="description" content="Madhuvana helps curious kids learn science, solve real-world problems, and grow into tomorrow’s science champions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --honey: #f7b928;
+      --honey-dark: #d99b10;
+      --ink: #1f1f1f;
+      --muted: #5c5c5c;
+      --paper: #fffaf0;
+      --soft: #fff3cf;
+      --line: #ead9a8;
+      --white: #ffffff;
+      --shadow: 0 24px 70px rgba(74, 54, 12, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(247,185,40,0.16), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(247,185,40,0.13), transparent 25%),
+        linear-gradient(180deg, #fffdf8 0%, var(--paper) 100%);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.24;
+      background-image:
+        linear-gradient(30deg, transparent 30%, rgba(217,155,16,.1) 31%, transparent 32%),
+        linear-gradient(150deg, transparent 30%, rgba(217,155,16,.08) 31%, transparent 32%);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(90deg, black, transparent 40%, transparent 70%, black);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(255,250,240,0.78);
+      border-bottom: 1px solid rgba(234,217,168,0.65);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: var(--white);
+      box-shadow: 6px 6px 0 rgba(247,185,40,0.28);
+      font-size: 28px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-weight: 800;
+      color: #303030;
+    }
+
+    .links a {
+      position: relative;
+    }
+
+    .links a:first-child::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--honey);
+    }
+
+    .nav-cta, .hero-cta {
+      border: 2px solid var(--ink);
+      background: var(--honey);
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 900;
+      box-shadow: 5px 5px 0 var(--ink);
+      transition: transform .2s ease, box-shadow .2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-cta:hover, .hero-cta:hover {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 78px 24px 40px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      color: #6f510b;
+      font-weight: 900;
+      margin-bottom: 24px;
+    }
+
+    .hero h2 {
+      font-size: clamp(46px, 7vw, 88px);
+      line-height: 0.96;
+      letter-spacing: -0.065em;
+      margin: 0 0 24px;
+      font-weight: 900;
+    }
+
+    .hero h2 span {
+      color: var(--honey-dark);
+      display: block;
+      font-family: "Playfair Display", serif;
+      letter-spacing: -0.035em;
+    }
+
+    .hero p {
+      font-size: 21px;
+      line-height: 1.58;
+      color: #3d3d3d;
+      max-width: 560px;
+      margin: 0 0 32px;
+      font-weight: 650;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .secondary {
+      padding: 13px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.75);
+      font-weight: 900;
+    }
+
+    .hero-art {
+      position: relative;
+      min-height: 560px;
+      border-radius: 38px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,243,207,.62)),
+        radial-gradient(circle at 78% 20%, rgba(247,185,40,.28), transparent 28%);
+      border: 2px solid rgba(31,31,31,0.1);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-art::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 2px dashed rgba(31,31,31,0.16);
+      border-radius: 30px;
+    }
+
+    .bee-guru {
+      position: absolute;
+      right: 52px;
+      bottom: 42px;
+      width: 330px;
+      height: 430px;
+    }
+
+    .bee-body {
+      position: absolute;
+      left: 66px;
+      top: 110px;
+      width: 210px;
+      height: 260px;
+      background: repeating-linear-gradient(180deg, #f9c84a 0 34px, #222 35px 58px);
+      border: 4px solid var(--ink);
+      border-radius: 48% 48% 42% 42%;
+      transform: rotate(-5deg);
+      box-shadow: 12px 18px 0 rgba(31,31,31,.08);
+    }
+
+    .bee-face {
+      position: absolute;
+      left: 56px;
+      top: 44px;
+      width: 230px;
+      height: 175px;
+      background: #ffd66b;
+      border: 4px solid var(--ink);
+      border-radius: 48%;
+      z-index: 2;
+    }
+
+    .eye {
+      position: absolute;
+      top: 62px;
+      width: 48px;
+      height: 48px;
+      background: white;
+      border: 4px solid var(--ink);
+      border-radius: 50%;
+    }
+
+    .eye.left { left: 54px; }
+    .eye.right { right: 54px; }
+
+    .eye::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: var(--ink);
+      border-radius: 50%;
+      left: 14px;
+      top: 14px;
+    }
+
+    .glasses {
+      position: absolute;
+      left: 43px;
+      top: 57px;
+      width: 144px;
+      height: 60px;
+      border-top: 4px solid var(--ink);
+      z-index: 3;
+    }
+
+    .smile {
+      position: absolute;
+      left: 92px;
+      top: 118px;
+      width: 48px;
+      height: 24px;
+      border-bottom: 4px solid var(--ink);
+      border-radius: 0 0 50px 50px;
+    }
+
+    .antenna {
+      position: absolute;
+      top: 10px;
+      width: 70px;
+      height: 85px;
+      border-top: 4px solid var(--ink);
+      border-radius: 60px 60px 0 0;
+      z-index: 1;
+    }
+
+    .antenna.left { left: 92px; transform: rotate(-28deg); }
+    .antenna.right { right: 92px; transform: rotate(28deg); }
+
+    .wing {
+      position: absolute;
+      width: 135px;
+      height: 210px;
+      border: 3px solid rgba(31,31,31,.45);
+      border-radius: 65% 35% 65% 35%;
+      background: rgba(255,255,255,.58);
+      top: 150px;
+      z-index: 0;
+    }
+
+    .wing.left { left: 0; transform: rotate(-22deg); }
+    .wing.right { right: 0; transform: rotate(22deg) scaleX(-1); }
+
+    .coat {
+      position: absolute;
+      left: 42px;
+      top: 205px;
+      width: 250px;
+      height: 210px;
+      background: rgba(255,255,255,.92);
+      border: 4px solid var(--ink);
+      border-radius: 22px 22px 55px 55px;
+      clip-path: polygon(16% 0, 84% 0, 100% 100%, 0 100%);
+      z-index: 4;
+    }
+
+    .book {
+      position: absolute;
+      left: 80px;
+      top: 260px;
+      width: 165px;
+      height: 105px;
+      background: #f4d28a;
+      border: 4px solid var(--ink);
+      border-radius: 12px;
+      z-index: 5;
+      transform: rotate(-4deg);
+      padding: 18px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .pointing {
+      position: absolute;
+      left: 44px;
+      top: 194px;
+      width: 90px;
+      height: 18px;
+      background: var(--ink);
+      border-radius: 999px;
+      transform: rotate(-48deg);
+      z-index: 5;
+    }
+
+    .pointing::after {
+      content: "☝";
+      position: absolute;
+      left: -26px;
+      top: -38px;
+      font-size: 42px;
+      transform: rotate(48deg);
+    }
+
+    .science-doodles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      font-size: 50px;
+    }
+
+    .doodle {
+      position: absolute;
+      filter: drop-shadow(3px 6px 0 rgba(31,31,31,.07));
+    }
+
+    .d1 { left: 64px; bottom: 95px; }
+    .d2 { left: 245px; bottom: 92px; }
+    .d3 { right: 70px; top: 90px; }
+    .d4 { left: 92px; top: 86px; }
+
+    .signpost {
+      position: absolute;
+      right: 40px;
+      bottom: 88px;
+      z-index: 6;
+      display: grid;
+      gap: 10px;
+    }
+
+    .signpost span {
+      display: block;
+      background: #f8e7b6;
+      border: 2px solid var(--ink);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 900;
+      transform: rotate(var(--r));
+      box-shadow: 4px 4px 0 rgba(31,31,31,.12);
+    }
+
+    .stats {
+      max-width: 1180px;
+      margin: 10px auto 0;
+      padding: 0 24px 70px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 14px 35px rgba(74,54,12,.08);
+    }
+
+    .stat-card .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--soft);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      border: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+
+    .stat-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .stat-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 70px 24px;
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 38px;
+    }
+
+    .section-title h2 {
+      margin: 0 0 14px;
+      font-size: clamp(34px, 5vw, 56px);
+      letter-spacing: -0.045em;
+      line-height: 1;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .pathway {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .path-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+      border: 2px solid rgba(31,31,31,.09);
+      border-radius: 32px;
+      padding: 30px;
+      box-shadow: 0 18px 45px rgba(74,54,12,.1);
+    }
+
+    .path-card::after {
+      content: "";
+      position: absolute;
+      right: -36px;
+      top: -36px;
+      width: 120px;
+      height: 120px;
+      background: var(--soft);
+      border-radius: 50%;
+    }
+
+    .path-card strong {
+      display: inline-grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      background: var(--honey);
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      font-size: 24px;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .path-card h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .path-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .cta-band {
+      max-width: 1180px;
+      margin: 70px auto;
+      padding: 0 24px;
+    }
+
+    .cta-inner {
+      border-radius: 38px;
+      background: linear-gradient(135deg, var(--ink), #3a2b08);
+      color: var(--white);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cta-inner::after {
+      content: "🐝";
+      position: absolute;
+      right: 42px;
+      top: -26px;
+      font-size: 180px;
+      opacity: .08;
+      transform: rotate(-15deg);
+    }
+
+    .cta-inner h2 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4vw, 48px);
+      letter-spacing: -0.04em;
+    }
+
+    .cta-inner p {
+      margin: 0;
+      color: rgba(255,255,255,.78);
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 30px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    @media (max-width: 980px) {
+      .links { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 48px; }
+      .hero-art { min-height: 520px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .pathway { grid-template-columns: 1fr; }
+      .cta-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .nav { padding: 14px 18px; }
+      .brand h1 { font-size: 22px; }
+      .brand p { display: none; }
+      .nav-cta { display: none; }
+      .hero { padding: 42px 18px 28px; }
+      .hero p { font-size: 18px; }
+      .hero-art { min-height: 480px; border-radius: 28px; }
+      .bee-guru { transform: scale(.72); transform-origin: bottom right; right: 10px; bottom: 20px; }
+      .signpost { display: none; }
+      .stats { grid-template-columns: 1fr; padding: 0 18px 42px; }
+      .section { padding: 48px 18px; }
+      .cta-band { margin: 42px auto; padding: 0 18px; }
+      .cta-inner { padding: 34px 24px; border-radius: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="#">
+          <div class="logo" aria-hidden="true">🐝</div>
+          <div>
+            <h1>Madhuvana</h1>
+            <p>Where curiosity flows like nectar</p>
+          </div>
+        </a>
+
+        <div class="links" aria-label="Navigation links">
+          <a href="#home">Home</a>
+          <a href="#programs">Programs</a>
+          <a href="#pathway">Pathway</a>
+          <a href="#community">Community</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <a class="nav-cta" href="#contact">Join the Hive</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">🔬 Science Bee Learning Platform</div>
+          <h2>Dream. Discover. <span>Make a Difference.</span></h2>
+          <p>
+            Madhuvana is a buzzing home for curious kids to explore science, practice competition skills,
+            build projects, and grow into confident science champions.
+          </p>
+          <div class="actions">
+            <a class="hero-cta" href="#programs">Start Your Journey →</a>
+            <a class="secondary" href="#pathway">See Learning Path</a>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="Illustration of Madhu, a friendly science mentor bee">
+          <div class="science-doodles" aria-hidden="true">
+            <span class="doodle d1">🔬</span>
+            <span class="doodle d2">💻</span>
+            <span class="doodle d3">🧪</span>
+            <span class="doodle d4">🌱</span>
+          </div>
+
+          <div class="bee-guru" aria-hidden="true">
+            <div class="wing left"></div>
+            <div class="wing right"></div>
+            <div class="antenna left"></div>
+            <div class="antenna right"></div>
+            <div class="bee-body"></div>
+            <div class="bee-face">
+              <div class="glasses"></div>
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="smile"></div>
+            </div>
+            <div class="coat"></div>
+            <div class="pointing"></div>
+            <div class="book">Curiosity<br>Purpose<br>Impact</div>
+          </div>
+
+          <div class="signpost" aria-hidden="true">
+            <span style="--r:-3deg">Explore</span>
+            <span style="--r:2deg">Experiment</span>
+            <span style="--r:-2deg">Innovate</span>
+            <span style="--r:3deg">Lead</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats" id="programs" aria-label="Program highlights">
+        <article class="stat-card">
+          <div class="icon">💡</div>
+          <h3>Concept Learning</h3>
+          <p>Short, visual lessons that help kids understand the “why,” not just memorize answers.</p>
+        </article>
+        <article class="stat-card">
+          <div class="icon">🔎</div>
+          <h3>Science Bee Practice</h3>
+          <p>Topic-wise quizzes, hints, explanations, and challenge rounds for competition readiness.</p>
+        </article>
+        <article class="stat-card">
+          <div class="icon">🏆</div>
+          <h3>Champion Mindset</h3>
+          <p>Confidence-building activities, progress badges, and goals that keep learners motivated.</p>
+        </article>
+        <article class="stat-card">
+          <div class="icon">🤝</div>
+          <h3>Mentor Support</h3>
+          <p>Guided learning with friendly mentor-style explanations from Madhu, the science bee.</p>
+        </article>
+      </section>
+
+      <section class="section" id="pathway">
+        <div class="section-title">
+          <h2>The Madhuvana Pathway</h2>
+          <p>Designed for young learners who want to move from curiosity to mastery through joyful, structured science learning.</p>
+        </div>
+
+        <div class="pathway">
+          <article class="path-card">
+            <strong>1</strong>
+            <h3>Explore</h3>
+            <p>Kids begin with stories, visual concepts, everyday examples, and interactive explanations.</p>
+          </article>
+          <article class="path-card">
+            <strong>2</strong>
+            <h3>Experiment</h3>
+            <p>They answer questions, test ideas, learn from mistakes, and strengthen scientific thinking.</p>
+          </article>
+          <article class="path-card">
+            <strong>3</strong>
+            <h3>Excel</h3>
+            <p>They prepare for Science Bee-style challenges with speed, accuracy, and confidence.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-band" id="community">
+        <div class="cta-inner">
+          <div>
+            <h2>Curious today. Champion tomorrow.</h2>
+            <p>Build a smarter, kinder, more scientific generation—one curious question at a time.</p>
+          </div>
+          <a class="hero-cta" href="#contact">Request Early Access →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact">
+      © 2026 Madhuvana. Built for young science explorers and future champions.
+    </footer>
+  </div>
+</body>
+</html>
